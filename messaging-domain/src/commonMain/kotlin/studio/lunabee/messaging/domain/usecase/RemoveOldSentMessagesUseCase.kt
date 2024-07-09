@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) 2023 Lunabee Studio
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Created by Lunabee Studio / Date - 8/21/2023 - for the oneSafe6 SDK.
+ * Last modified 21/08/2023 10:06
+ */
+
+package studio.lunabee.messaging.domain.usecase
+
+import com.lunabee.lbcore.model.LBResult
+import com.lunabee.lblogger.LBLogger
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import studio.lunabee.bubbles.domain.di.Inject
+import studio.lunabee.bubbles.domain.repository.SafeRepository
+import studio.lunabee.bubbles.domain.usecase.ContactLocalDecryptUseCase
+import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.messaging.domain.model.SentMessage
+import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
+import studio.lunabee.messaging.domain.repository.SentMessageRepository
+import kotlin.time.Duration
+
+private val logger = LBLogger.get<RemoveOldSentMessagesUseCase>()
+
+class RemoveOldSentMessagesUseCase @Inject constructor(
+    private val sentMessageRepository: SentMessageRepository,
+    private val localContactLocalDecryptUseCase: ContactLocalDecryptUseCase,
+    private val messagingSettingsRepository: MessagingSettingsRepository,
+    private val clock: Clock,
+    private val safeRepository: SafeRepository,
+) {
+
+    suspend operator fun invoke(): LBResult<Unit> = BubblesError.runCatching(logger) {
+        val safeId = safeRepository.currentSafeId()
+        var oldestSentMessage: SentMessage? = sentMessageRepository.getOldestSentMessage()
+        val sentMessageTimeToLive: Duration = messagingSettingsRepository.bubblesResendMessageDelayFlow(safeId)
+        while (oldestSentMessage != null) {
+            val createdAtRes: LBResult<Instant> = localContactLocalDecryptUseCase(
+                data = oldestSentMessage.encCreatedAt,
+                contactId = oldestSentMessage.contactId,
+                clazz = Instant::class,
+            )
+            oldestSentMessage = when (createdAtRes) {
+                is LBResult.Failure -> delete(oldestSentMessage)
+                is LBResult.Success -> {
+                    val messageAge = clock.now() - createdAtRes.successData
+                    if (messageAge > sentMessageTimeToLive) {
+                        delete(oldestSentMessage)
+                    } else {
+                        null
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun delete(actualSentMessage: SentMessage): SentMessage? {
+        sentMessageRepository.deleteSentMessage(actualSentMessage.id)
+        return sentMessageRepository.getOldestSentMessage()
+    }
+}
