@@ -20,7 +20,7 @@
 import java.net.URI
 
 plugins {
-    alias(libs.plugins.kmp) apply false
+    alias(libs.plugins.kotlinMultiplatform).apply(false)
     alias(libs.plugins.detekt)
 }
 

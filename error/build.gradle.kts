@@ -15,75 +15,25 @@
  */
 
 plugins {
-    alias(libs.plugins.kmp)
+    alias(libs.plugins.kotlinMultiplatform)
     id("java-library")
-    `lunabee-publish`
 }
 
 group = "studio.lunabee.bubbles.error"
 description = "Errors for bubbles"
-version = "0.1.4"
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = ProjectConfig.JDK_VERSION.toString()
-        }
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
-        withJava()
-    }
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64(),
-    )
+    jvm()
+    iosSimulatorArm64()
+    iosArm64()
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.kotlinx.datetime)
-                implementation(libs.doubleratchet)
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(project.dependencies.platform(libs.lunabee.bom))
-                implementation(libs.lbcore)
-                implementation(libs.lblogger)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-                implementation(libs.kotlinx.coroutine.test)
-            }
-        }
-        val jvmMain by getting
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
-    }
-
-    targets.all {
-        compilations.all {
-            compilerOptions.configure {
-                freeCompilerArgs.add("-Xexpect-actual-classes")
-            }
+        commonMain.dependencies {
+            implementation(libs.doubleratchet)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(project.dependencies.platform(libs.lunabee.bom))
+            implementation(libs.lbcore)
+            implementation(libs.lblogger)
         }
     }
 }
