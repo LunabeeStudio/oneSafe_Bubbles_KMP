@@ -16,7 +16,6 @@
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("java-library")
 }
 
 group = "studio.lunabee.messaging.repository"
@@ -35,9 +34,9 @@ kotlin {
             implementation(project.dependencies.platform(libs.lunabee.bom))
             implementation(libs.lbcore)
             implementation(libs.lblogger)
-            implementation(project(":messaging-domain"))
-            implementation(project(":bubbles-domain"))
-            implementation(project(":error"))
+            implementation(project(":oneSafe_Bubbles_KMP:messaging-domain"))
+            implementation(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
+            implementation(project(":oneSafe_Bubbles_KMP:error"))
         }
     }
 }

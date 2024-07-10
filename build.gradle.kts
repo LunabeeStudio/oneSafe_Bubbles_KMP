@@ -22,6 +22,7 @@ import java.net.URI
 plugins {
     alias(libs.plugins.kotlinMultiplatform).apply(false)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.androidLibrary).apply(false)
 }
 
 val artifactoryUsername: String = project.findProperty("artifactory_consumer_username") as? String

@@ -16,8 +16,6 @@
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("java-library")
-    alias(libs.plugins.protobuf)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -38,8 +36,8 @@ kotlin {
             implementation(project.dependencies.platform(libs.lunabee.bom))
             implementation(libs.lbcore)
             implementation(libs.lblogger)
-            implementation(project(":bubbles-domain"))
-            implementation(project(":error"))
+            implementation(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
+            implementation(project(":oneSafe_Bubbles_KMP:error"))
         }
     }
 }

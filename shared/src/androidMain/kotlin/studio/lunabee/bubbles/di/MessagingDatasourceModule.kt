@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023 Lunabee Studio
+ * Copyright (c) 2024 Lunabee Studio
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import org.gradle.api.JavaVersion
+package studio.lunabee.bubbles.di
 
-object ProjectConfig {
-    const val LIBRARY_URL: String = "https://github.com/LunabeeStudio/oneSafe_Bubbles_KMP"
-    const val GROUP_ID: String = "studio.lunabee.bubbles"
-    const val COMPILE_SDK: Int = 34
-    const val MIN_SDK: Int = 23
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-    val JDK_VERSION: JavaVersion = JavaVersion.VERSION_17
+@Module
+@InstallIn(SingletonComponent::class)
+internal interface MessagingDatasourceModule {
+    // sentMessageLocalDatasource: SentMessageLocalDatasource,
+    // messageLocalDataSource: MessageLocalDataSource,
+    // handShakeDataLocalDatasource: HandShakeDataLocalDatasource,
+    // enqueuedMessageLocalDataSource: EnqueuedMessageLocalDataSource,
 }

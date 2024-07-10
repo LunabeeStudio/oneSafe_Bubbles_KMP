@@ -16,8 +16,24 @@
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("java-library")
+    id("com.android.library")
     `lunabee-publish`
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.ksp)
+}
+
+android {
+    namespace = "studio.lunabee.bubbles.di"
+    compileSdk = ProjectConfig.COMPILE_SDK
+
+    defaultConfig {
+        minSdk = ProjectConfig.MIN_SDK
+    }
+
+    compileOptions {
+        sourceCompatibility = ProjectConfig.JDK_VERSION
+        targetCompatibility = ProjectConfig.JDK_VERSION
+    }
 }
 
 group = "studio.lunabee.bubbles.di"
@@ -25,32 +41,43 @@ description = "DI entry point for ios app"
 version = "0.0.1-SNAPSHOT"
 
 kotlin {
-    jvm()
+    androidTarget()
     listOf(
         iosSimulatorArm64(),
         iosArm64(),
     ).forEach {
         it.binaries.framework {
             baseName = "bubbles"
-            export(project(":bubbles-domain"))
-            export(project(":bubbles-repository"))
-            export(project(":messaging-domain"))
-            export(project(":messaging-repository"))
-            export(project(":error"))
+            export(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
+            export(project(":oneSafe_Bubbles_KMP:bubbles-repository"))
+            export(project(":oneSafe_Bubbles_KMP:messaging-domain"))
+            export(project(":oneSafe_Bubbles_KMP:messaging-repository"))
+            export(project(":oneSafe_Bubbles_KMP:error"))
         }
     }
-
     sourceSets {
         commonMain.dependencies {
-            api(project(":bubbles-domain"))
-            api(project(":bubbles-repository"))
-            api(project(":messaging-domain"))
-            api(project(":messaging-repository"))
-            api(project(":error"))
-        }
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.doubleratchet)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(project.dependencies.platform(libs.lunabee.bom))
+            implementation(libs.lbcore)
+            implementation(libs.lblogger)
 
-        iosMain.dependencies {
-            implementation(libs.koin.core)
+            implementation(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
+            implementation(project(":oneSafe_Bubbles_KMP:bubbles-repository"))
+            implementation(project(":oneSafe_Bubbles_KMP:messaging-domain"))
+            implementation(project(":oneSafe_Bubbles_KMP:messaging-repository"))
+            implementation(project(":oneSafe_Bubbles_KMP:error"))
+        }
+        iosMain.dependencies { implementation(libs.koin.core) }
+
+        androidMain.dependencies {
+            implementation(libs.dagger.hilt.android)
         }
     }
+}
+
+dependencies {
+    add("kspAndroid", libs.dagger.hilt.android.compiler)
 }

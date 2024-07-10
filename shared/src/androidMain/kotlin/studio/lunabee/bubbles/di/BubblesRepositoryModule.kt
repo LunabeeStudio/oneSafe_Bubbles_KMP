@@ -16,20 +16,24 @@
 
 package studio.lunabee.bubbles.di
 
-import org.koin.dsl.module
-import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
-import studio.lunabee.bubbles.domain.repository.SafeRepository
 import studio.lunabee.bubbles.repository.ContactKeyRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactRepositoryImpl
 
-fun bubblesRepositoryModule(
-    bubblesCryptoRepository: BubblesCryptoRepository,
-    safeRepository: SafeRepository,
-) = module {
-    single<ContactKeyRepository> { ContactKeyRepositoryImpl(get()) }
-    single<BubblesCryptoRepository> { bubblesCryptoRepository }
-    single<ContactRepository> { ContactRepositoryImpl(get()) }
-    single<SafeRepository> { safeRepository }
+@Module
+@InstallIn(SingletonComponent::class)
+internal interface BubblesRepositoryModule {
+    @Binds
+    fun bindsContactKeyRepository(contactKeyRepositoryImpl: ContactKeyRepositoryImpl): ContactKeyRepository
+
+    @Binds
+    fun bindsContactRepository(contactRepositoryImpl: ContactRepositoryImpl): ContactRepository
+
+    // single<BubblesCryptoRepository> { bubblesCryptoRepository }
+    // single<SafeRepository> { safeRepository }
 }

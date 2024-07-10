@@ -16,7 +16,6 @@
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("java-library")
 }
 
 group = "studio.lunabee.bubbles.error"

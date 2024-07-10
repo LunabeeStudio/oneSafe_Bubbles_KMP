@@ -16,13 +16,10 @@
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("java-library")
-    `lunabee-publish`
 }
 
 group = "studio.lunabee.bubbles.domain"
 description = "Kotlin multiplatform implementation of oneSafe bubbles"
-version = "0.1.4"
 
 kotlin {
     jvm()
@@ -38,7 +35,7 @@ kotlin {
             implementation(libs.lbcore)
             implementation(libs.lblogger)
 
-            implementation(project(":error"))
+            implementation(project(":oneSafe_Bubbles_KMP:error"))
         }
 
         jvmMain.dependencies {

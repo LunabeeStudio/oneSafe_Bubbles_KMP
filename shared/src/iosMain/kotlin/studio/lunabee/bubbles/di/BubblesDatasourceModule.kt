@@ -17,19 +17,13 @@
 package studio.lunabee.bubbles.di
 
 import org.koin.dsl.module
-import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
-import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
-import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
-import studio.lunabee.messaging.repository.datasource.SentMessageLocalDatasource
+import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
+import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
 
 fun bubblesDatasourceModule(
-    enqueuedMessageLocalDataSource: EnqueuedMessageLocalDataSource,
-    handShakeDataLocalDatasource: HandShakeDataLocalDatasource,
-    messageLocalDataSource: MessageLocalDataSource,
-    sentMessageLocalDatasource: SentMessageLocalDatasource,
+    contactKeyLocalDataSource: ContactKeyLocalDataSource,
+    contactLocalDataSource: ContactLocalDataSource,
 ) = module {
-    single<EnqueuedMessageLocalDataSource> { enqueuedMessageLocalDataSource }
-    single<HandShakeDataLocalDatasource> { handShakeDataLocalDatasource }
-    single<MessageLocalDataSource> { messageLocalDataSource }
-    single<SentMessageLocalDatasource> { sentMessageLocalDatasource }
+    single<ContactKeyLocalDataSource> { contactKeyLocalDataSource }
+    single<ContactLocalDataSource> { contactLocalDataSource }
 }

@@ -24,7 +24,5 @@ import studio.lunabee.bubbles.domain.model.SafeId
 
 interface SafeRepository {
     suspend fun currentSafeId(): SafeId
-    suspend fun currentSafeIdOrNull(): SafeId?
-    suspend fun getAllSafeId(): List<SafeId>
     fun currentSafeIdFlow(): Flow<SafeId?>
 }

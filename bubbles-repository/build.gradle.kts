@@ -16,7 +16,6 @@
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    id("java-library")
 }
 
 group = "studio.lunabee.bubbles.repository"
@@ -32,7 +31,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.doubleratchet)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(project(":bubbles-domain"))
+            implementation(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
         }
     }
 }
