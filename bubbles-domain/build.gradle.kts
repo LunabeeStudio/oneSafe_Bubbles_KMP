@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
 }
 
-group = "studio.lunabee.bubbles.domain"
+group = "studio.lunabee.bubbles"
 description = "Kotlin multiplatform implementation of oneSafe bubbles"
 
 kotlin {

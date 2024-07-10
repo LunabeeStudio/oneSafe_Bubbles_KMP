@@ -19,7 +19,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-group = "studio.lunabee.messaging.domain"
+group = "studio.lunabee.messaging"
 description = "Kotlin multiplatform implementation of oneSafe messaging"
 
 kotlin {

@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
 }
 
-group = "studio.lunabee.messaging.repository"
+group = "studio.lunabee.messaging"
 description = "Kotlin multiplatform implementation of oneSafe messaging"
 
 kotlin {

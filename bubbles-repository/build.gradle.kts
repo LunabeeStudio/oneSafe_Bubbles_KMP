@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
 }
 
-group = "studio.lunabee.bubbles.repository"
+group = "studio.lunabee.bubbles"
 description = "Repository"
 
 kotlin {

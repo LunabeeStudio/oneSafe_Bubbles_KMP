@@ -20,6 +20,7 @@ plugins {
     `lunabee-publish`
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.skie)
 }
 
 android {
@@ -36,7 +37,7 @@ android {
     }
 }
 
-group = "studio.lunabee.bubbles.di"
+group = "studio.lunabee.bubbles"
 description = "DI entry point for ios app"
 version = "0.0.1-SNAPSHOT"
 
@@ -80,4 +81,8 @@ kotlin {
 
 dependencies {
     add("kspAndroid", libs.dagger.hilt.android.compiler)
+}
+
+kotlin.sourceSets.all {
+    languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
 }

@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
 }
 
-group = "studio.lunabee.bubbles.error"
+group = "studio.lunabee.bubbles"
 description = "Errors for bubbles"
 
 kotlin {
