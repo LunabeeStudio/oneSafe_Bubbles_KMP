@@ -26,10 +26,9 @@ version = "0.0.1-SNAPSHOT"
 
 kotlin {
     jvm()
-
     listOf(
         iosSimulatorArm64(),
-        iosArm64()
+        iosArm64(),
     ).forEach {
         it.binaries.framework {
             baseName = "bubbles"
@@ -48,6 +47,10 @@ kotlin {
             api(project(":messaging-domain"))
             api(project(":messaging-repository"))
             api(project(":error"))
+        }
+
+        iosMain.dependencies {
+            implementation(libs.koin.core)
         }
     }
 }

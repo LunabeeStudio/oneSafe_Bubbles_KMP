@@ -29,7 +29,6 @@ import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contact.PlainContact
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.usecase.CreateContactUseCase
-import studio.lunabee.bubbles.domain.usecase.InsertHandShakeDataUseCase
 import studio.lunabee.bubbles.error.BubblesDomainError
 import studio.lunabee.doubleratchet.DoubleRatchetEngine
 import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository

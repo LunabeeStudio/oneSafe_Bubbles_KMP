@@ -25,7 +25,6 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.usecase.SaveMessageUseCase
 import studio.lunabee.doubleratchet.model.createRandomUUID
 import studio.lunabee.messaging.domain.model.DecryptResult
 import studio.lunabee.messaging.domain.model.MessageId

@@ -22,7 +22,6 @@ package studio.lunabee.messaging.domain.usecase
 import com.lunabee.lbcore.model.LBResult
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.ConversationId
-import studio.lunabee.bubbles.domain.usecase.GetHandShakeDataUseCase
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.bubbles.error.BubblesMessagingError
 import studio.lunabee.doubleratchet.model.Conversation

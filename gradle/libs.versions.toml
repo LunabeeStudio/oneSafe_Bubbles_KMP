@@ -37,6 +37,8 @@ javax-inject = "1"
 
 protobuf-plugin = "0.9.4"
 
+koin = "3.5.3"
+
 [libraries]
 
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
@@ -52,3 +54,4 @@ lunabee-bom = { group = "studio.lunabee", name = "lunabee-bom", version.ref = "l
 lbcore = { group = "studio.lunabee", name = "lbcore" }
 lblogger = { group = "studio.lunabee", name = "lblogger-kermit" }
 kotlinx-serialization-protobuf = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
