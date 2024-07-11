@@ -24,12 +24,12 @@ import kotlinx.datetime.Clock
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.EncryptEntry
 import studio.lunabee.bubbles.domain.model.MessageSharingMode
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
 import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class UpdateContactUseCase @Inject constructor(
     private val contactRepository: ContactRepository,
@@ -38,7 +38,7 @@ class UpdateContactUseCase @Inject constructor(
     private val clock: Clock,
 ) {
     suspend operator fun invoke(
-        id: ContactId,
+        id: DoubleRatchetUUID,
         sharingMode: MessageSharingMode,
         name: String,
     ): LBResult<Unit> = BubblesError.runCatching {

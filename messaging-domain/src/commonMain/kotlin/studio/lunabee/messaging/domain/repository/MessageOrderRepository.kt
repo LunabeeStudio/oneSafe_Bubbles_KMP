@@ -19,13 +19,12 @@
 
 package studio.lunabee.messaging.domain.repository
 
-import studio.lunabee.bubbles.domain.model.contact.ContactId
-import studio.lunabee.messaging.domain.model.MessageId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.MessageOrder
 
 interface MessageOrderRepository {
-    suspend fun getMostRecent(contactId: ContactId, exceptIds: List<MessageId>): MessageOrder?
-    suspend fun getLeastRecent(contactId: ContactId, exceptIds: List<MessageId>): MessageOrder?
-    suspend fun count(contactId: ContactId, exceptIds: List<MessageId>): Int
-    suspend fun getAt(contactId: ContactId, position: Int, exceptIds: List<MessageId>): MessageOrder?
+    suspend fun getMostRecent(contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): MessageOrder?
+    suspend fun getLeastRecent(contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): MessageOrder?
+    suspend fun count(contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): Int
+    suspend fun getAt(contactId: DoubleRatchetUUID, position: Int, exceptIds: List<DoubleRatchetUUID>): MessageOrder?
 }

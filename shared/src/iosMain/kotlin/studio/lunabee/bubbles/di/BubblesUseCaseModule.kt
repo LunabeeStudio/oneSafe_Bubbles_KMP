@@ -16,6 +16,9 @@
 
 package studio.lunabee.bubbles.di
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import studio.lunabee.bubbles.domain.usecase.ContactLocalDecryptUseCase
@@ -26,7 +29,7 @@ import studio.lunabee.bubbles.domain.usecase.GetRecentContactsUseCase
 import studio.lunabee.bubbles.domain.usecase.UpdateContactUseCase
 import studio.lunabee.bubbles.domain.usecase.UpdateMessageSharingModeContactUseCase
 
-val BubblesUseCaseModule = module {
+val bubblesUseCaseModule: Module = module {
     singleOf(::ContactLocalDecryptUseCase)
     singleOf(::CreateContactUseCase)
     singleOf(::GetAllContactsUseCase)
@@ -34,4 +37,14 @@ val BubblesUseCaseModule = module {
     singleOf(::GetRecentContactsUseCase)
     singleOf(::UpdateContactUseCase)
     singleOf(::UpdateMessageSharingModeContactUseCase)
+}
+
+class BubblesUseCases : KoinComponent {
+    val contactLocalDecryptUseCase: ContactLocalDecryptUseCase by inject()
+    val createContactUseCase: CreateContactUseCase by inject()
+    val getAllContactsUseCase: GetAllContactsUseCase by inject()
+    val getContactUseCase: GetContactUseCase by inject()
+    val getRecentContactsUseCase: GetRecentContactsUseCase by inject()
+    val updateContactUseCase: UpdateContactUseCase by inject()
+    val updateMessageSharingModeContactUseCase: UpdateMessageSharingModeContactUseCase by inject()
 }

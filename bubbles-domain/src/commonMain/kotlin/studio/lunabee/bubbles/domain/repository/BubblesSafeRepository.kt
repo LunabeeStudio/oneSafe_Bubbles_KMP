@@ -12,10 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Created by Lunabee Studio / Date - 6/6/2024 - for the oneSafe6 SDK.
+ * Last modified 6/6/24, 3:29 PM
  */
 
-package studio.lunabee.bubbles.domain.model
+package studio.lunabee.bubbles.domain.repository
 
+import kotlinx.coroutines.flow.Flow
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
-data class ConversationId(val value: DoubleRatchetUUID)
+interface BubblesSafeRepository {
+    suspend fun currentSafeId(): DoubleRatchetUUID
+    fun currentSafeIdFlow(): Flow<DoubleRatchetUUID?>
+}

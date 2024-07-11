@@ -24,10 +24,10 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.DecryptEntry
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.error.BubblesCryptoError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.MessageOrder
 import studio.lunabee.messaging.domain.repository.MessageOrderRepository
 import kotlin.math.ceil
@@ -50,7 +50,7 @@ class MessageOrderCalculator @Inject constructor(
 ) {
     suspend operator fun invoke(
         messageSentAt: Instant,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
         key: ContactLocalKey,
     ): OrderResult {
         val excludedMessages: MutableList<MessageOrder> = mutableListOf()
@@ -99,7 +99,7 @@ class MessageOrderCalculator @Inject constructor(
 
     private suspend fun binarySearch(
         newMessageSentAt: Instant,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
         key: ContactLocalKey,
         orderRange: Pair<Float, Float>,
         excludedMessages: MutableList<MessageOrder>,

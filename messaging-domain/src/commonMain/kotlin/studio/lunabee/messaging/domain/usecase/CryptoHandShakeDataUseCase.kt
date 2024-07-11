@@ -20,10 +20,8 @@
 package studio.lunabee.messaging.domain.usecase
 
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.bubbles.domain.model.DecryptEntry
 import studio.lunabee.bubbles.domain.model.EncryptEntry
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
@@ -35,7 +33,7 @@ class CryptoHandShakeDataUseCase @Inject constructor(
     private val contactKeyRepository: ContactKeyRepository,
 ) {
     suspend fun encrypt(handShakeData: HandShakeData): EncHandShakeData {
-        val contactId = ContactId(handShakeData.conversationLocalId.value)
+        val contactId = handShakeData.conversationLocalId
         val key = contactKeyRepository.getContactLocalKey(contactId)
         val encryptEntries = listOf<EncryptEntry<Any>?>(
             EncryptEntry(handShakeData.conversationSharedId), // +0
@@ -54,19 +52,20 @@ class CryptoHandShakeDataUseCase @Inject constructor(
 
     suspend fun decrypt(encHandShakeData: EncHandShakeData): HandShakeData {
         val conversationLocalId = encHandShakeData.conversationLocalId
-        val contactId = ContactId(conversationLocalId.value)
-        val key = contactKeyRepository.getContactLocalKey(contactId)
+        val key = contactKeyRepository.getContactLocalKey(conversationLocalId)
         val decryptEntries = listOf(
-            DecryptEntry(encHandShakeData.encConversationSharedId, String::class), // +0
+            DecryptEntry(encHandShakeData.encConversationSharedId, DoubleRatchetUUID::class), // +0
             encHandShakeData.encOneSafePrivateKey?.let { DecryptEntry(it, ByteArray::class) }, // +1
             encHandShakeData.encOneSafePublicKey?.let { DecryptEntry(it, ByteArray::class) }, // +2
         )
         val plainEntries = bubblesCryptoRepository.localDecrypt(key, decryptEntries)
-        return HandShakeData(
-            conversationLocalId,
-            ConversationId(DoubleRatchetUUID(plainEntries[0] as String)),
-            plainEntries[1] as ByteArray?,
-            plainEntries[2] as ByteArray?,
+        val data = HandShakeData(
+            conversationLocalId = conversationLocalId,
+            conversationSharedId = plainEntries[0] as DoubleRatchetUUID,
+            oneSafePrivateKey = plainEntries[1] as ByteArray?,
+            oneSafePublicKey = plainEntries[2] as ByteArray?,
         )
+        println("message -> $data")
+        return data
     }
 }

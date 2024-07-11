@@ -22,13 +22,12 @@ package studio.lunabee.bubbles.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.SafeId
 import studio.lunabee.bubbles.domain.model.contact.Contact
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.model.contactkey.ContactSharedKey
 import studio.lunabee.bubbles.domain.repository.ContactRepository
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class ContactRepositoryImpl @Inject constructor(
     private val localDataSource: ContactLocalDataSource,
@@ -36,38 +35,38 @@ class ContactRepositoryImpl @Inject constructor(
 
     override suspend fun save(contact: Contact, key: ContactLocalKey): Unit = localDataSource.saveContact(contact, key)
 
-    override fun getAllContactsFlow(safeId: SafeId): Flow<List<Contact>> = localDataSource.getAllContactsFlow(safeId)
+    override fun getAllContactsFlow(safeId: DoubleRatchetUUID): Flow<List<Contact>> = localDataSource.getAllContactsFlow(safeId)
 
-    override fun getRecentContactsFlow(maxNumber: Int, safeId: SafeId): Flow<List<Contact>> = localDataSource.getRecentContactsFlow(
+    override fun getRecentContactsFlow(maxNumber: Int, safeId: DoubleRatchetUUID): Flow<List<Contact>> = localDataSource.getRecentContactsFlow(
         maxNumber,
         safeId,
     )
 
-    override fun getContactFlow(id: ContactId): Flow<Contact?> = localDataSource.getContactFlow(id)
-    override suspend fun getContact(id: ContactId): Contact? = localDataSource.getContact(id)
+    override fun getContactFlow(id: DoubleRatchetUUID): Flow<Contact?> = localDataSource.getContactFlow(id)
+    override suspend fun getContact(id: DoubleRatchetUUID): Contact? = localDataSource.getContact(id)
 
-    override suspend fun getSharedKey(id: ContactId): ContactSharedKey? = localDataSource.getContactSharedKey(id)
-    override suspend fun addContactSharedKey(id: ContactId, sharedKey: ContactSharedKey) {
+    override suspend fun getSharedKey(id: DoubleRatchetUUID): ContactSharedKey? = localDataSource.getContactSharedKey(id)
+    override suspend fun addContactSharedKey(id: DoubleRatchetUUID, sharedKey: ContactSharedKey) {
         localDataSource.addContactSharedKey(id, sharedKey)
     }
 
-    override suspend fun deleteContact(id: ContactId) {
+    override suspend fun deleteContact(id: DoubleRatchetUUID) {
         localDataSource.deleteContact(id)
     }
 
-    override suspend fun updateMessageSharingMode(id: ContactId, encSharingMode: ByteArray, updateAt: Instant) {
+    override suspend fun updateMessageSharingMode(id: DoubleRatchetUUID, encSharingMode: ByteArray, updateAt: Instant) {
         localDataSource.updateMessageSharingMode(id, encSharingMode, updateAt)
     }
 
-    override suspend fun updateUpdatedAt(id: ContactId, updateAt: Instant) {
+    override suspend fun updateUpdatedAt(id: DoubleRatchetUUID, updateAt: Instant) {
         localDataSource.updateUpdatedAt(id, updateAt)
     }
 
-    override suspend fun updateContact(id: ContactId, encSharingMode: ByteArray, encName: ByteArray, updateAt: Instant) {
+    override suspend fun updateContact(id: DoubleRatchetUUID, encSharingMode: ByteArray, encName: ByteArray, updateAt: Instant) {
         localDataSource.updateContact(id, encSharingMode, encName, updateAt)
     }
 
-    override suspend fun updateContactConsultedAt(id: ContactId, consultedAt: Instant) {
+    override suspend fun updateContactConsultedAt(id: DoubleRatchetUUID, consultedAt: Instant) {
         localDataSource.updateContactConsultedAt(id, consultedAt)
     }
 }

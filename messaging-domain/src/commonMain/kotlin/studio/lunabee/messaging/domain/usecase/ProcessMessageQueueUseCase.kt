@@ -31,7 +31,6 @@ import studio.lunabee.bubbles.domain.model.DecryptEntry
 import studio.lunabee.bubbles.error.BubblesCryptoError
 import studio.lunabee.doubleratchet.model.createRandomUUID
 import studio.lunabee.messaging.domain.model.EnqueuedMessage
-import studio.lunabee.messaging.domain.model.MessageId
 import studio.lunabee.messaging.domain.repository.EnqueuedMessageRepository
 import studio.lunabee.messaging.domain.repository.MessagingCryptoRepository
 
@@ -94,7 +93,7 @@ class ProcessMessageQueueUseCase @Inject constructor(
                         plainMessage = plainMessage,
                         contactId = result.successData.contactId,
                         channel = channel,
-                        id = MessageId(createRandomUUID()),
+                        id = createRandomUUID(),
                     )
                     when (saveResult) {
                         is LBResult.Failure -> saveResult.throwable?.let {

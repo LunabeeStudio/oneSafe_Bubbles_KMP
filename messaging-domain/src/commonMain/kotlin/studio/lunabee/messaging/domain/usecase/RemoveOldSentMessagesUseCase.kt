@@ -24,7 +24,7 @@ import com.lunabee.lblogger.LBLogger
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.repository.SafeRepository
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.domain.usecase.ContactLocalDecryptUseCase
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.messaging.domain.model.SentMessage
@@ -39,11 +39,11 @@ class RemoveOldSentMessagesUseCase @Inject constructor(
     private val localContactLocalDecryptUseCase: ContactLocalDecryptUseCase,
     private val messagingSettingsRepository: MessagingSettingsRepository,
     private val clock: Clock,
-    private val safeRepository: SafeRepository,
+    private val bubblesSafeRepository: BubblesSafeRepository,
 ) {
 
     suspend operator fun invoke(): LBResult<Unit> = BubblesError.runCatching(logger) {
-        val safeId = safeRepository.currentSafeId()
+        val safeId = bubblesSafeRepository.currentSafeId()
         var oldestSentMessage: SentMessage? = sentMessageRepository.getOldestSentMessage()
         val sentMessageTimeToLive: Duration = messagingSettingsRepository.bubblesResendMessageDelayFlow(safeId)
         while (oldestSentMessage != null) {

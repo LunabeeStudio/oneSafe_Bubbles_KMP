@@ -16,6 +16,9 @@
 
 package studio.lunabee.bubbles.di
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import studio.lunabee.messaging.domain.repository.ConversationRepository
 import studio.lunabee.messaging.domain.repository.EnqueuedMessageRepository
@@ -37,7 +40,7 @@ import studio.lunabee.messaging.repository.SentMessageRepositoryImpl
 fun messagingRepositoryModule(
     messagingCryptoRepository: MessagingCryptoRepository,
     messagingSettingsRepository: MessagingSettingsRepository,
-) = module {
+): Module = module {
     single<ConversationRepository> { ConversationRepositoryImpl(get()) }
     single<EnqueuedMessageRepository> { EnqueuedMessageRepositoryImpl(get()) }
     single<HandShakeDataRepository> { HandShakeDataRepositoryImpl(get()) }
@@ -47,4 +50,15 @@ fun messagingRepositoryModule(
     single<MessagingCryptoRepository> { messagingCryptoRepository }
     single<MessagingSettingsRepository> { messagingSettingsRepository }
     single<SentMessageRepository> { SentMessageRepositoryImpl(get()) }
+}
+
+class MessagingRepositories : KoinComponent {
+    val conversationRepository: ConversationRepository by inject()
+    val enqueuedMessageRepository: EnqueuedMessageRepository by inject()
+    val handShakeDataRepository: HandShakeDataRepository by inject()
+    val messageChannelRepository: MessageChannelRepository by inject()
+    val messageOrderRepository: MessageOrderRepository by inject()
+    val messageRepository: MessageRepository by inject()
+    val messagingSettingsRepository: MessagingSettingsRepository by inject()
+    val sentMessageRepository: SentMessageRepository by inject()
 }

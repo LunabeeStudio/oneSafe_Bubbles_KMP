@@ -19,10 +19,10 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.domain.model.ConversationId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class EncConversation(
-    val id: ConversationId,
+    val id: DoubleRatchetUUID,
     val encPersonalPublicKey: ByteArray, // DRPublicKey
     val encPersonalPrivateKey: ByteArray, // DRPrivateKey
     val encMessageNumber: ByteArray, // Int

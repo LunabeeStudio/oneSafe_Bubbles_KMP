@@ -20,9 +20,7 @@
 package studio.lunabee.messaging.domain.usecase
 
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.bubbles.domain.model.MessageSharingMode
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contact.PlainContact
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.usecase.CreateContactUseCase
@@ -30,6 +28,7 @@ import studio.lunabee.doubleratchet.DoubleRatchetEngine
 import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
 import studio.lunabee.doubleratchet.model.AsymmetricKeyPair
 import studio.lunabee.doubleratchet.model.DRSharedSecret
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.createRandomUUID
 import studio.lunabee.messaging.domain.model.HandShakeData
 
@@ -48,17 +47,17 @@ class CreateInvitationUseCase @Inject constructor(
      *
      * @return the message string to send
      */
-    suspend operator fun invoke(contactName: String, sharingMode: MessageSharingMode): ContactId {
+    suspend operator fun invoke(contactName: String, sharingMode: MessageSharingMode): DoubleRatchetUUID {
         val keyPair: AsymmetricKeyPair = doubleRatchetKeyRepository.generateKeyPair()
         val contactId = createRandomUUID()
         val sharedConversationId = createRandomUUID()
         createContactUseCase(
             PlainContact(
-                id = ContactId(contactId),
+                id = contactId,
                 name = contactName,
                 // Not created yet
                 sharedKey = null,
-                sharedConversationId = ConversationId(sharedConversationId),
+                sharedConversationId = sharedConversationId,
                 sharingMode = sharingMode,
             ),
         )
@@ -71,13 +70,13 @@ class CreateInvitationUseCase @Inject constructor(
             newConversationId = contactId,
         )
         val handShakeData = HandShakeData(
-            conversationLocalId = ConversationId(contactId),
-            conversationSharedId = ConversationId(sharedConversationId),
+            conversationLocalId = contactId,
+            conversationSharedId = sharedConversationId,
             oneSafePrivateKey = keyPair.privateKey.value,
             oneSafePublicKey = keyPair.publicKey.value,
         )
 
         insertHandShakeDataUseCase(handShakeData)
-        return ContactId(contactId)
+        return contactId
     }
 }

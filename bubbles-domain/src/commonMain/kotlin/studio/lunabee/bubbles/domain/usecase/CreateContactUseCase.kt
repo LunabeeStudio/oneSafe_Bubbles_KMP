@@ -28,13 +28,13 @@ import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.model.contactkey.ContactSharedKey
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
-import studio.lunabee.bubbles.domain.repository.SafeRepository
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 
 class CreateContactUseCase @Inject constructor(
     private val contactRepository: ContactRepository,
     private val bubblesCryptoRepository: BubblesCryptoRepository,
     private val clock: Clock,
-    private val safeRepository: SafeRepository,
+    private val bubblesSafeRepository: BubblesSafeRepository,
 ) {
     suspend operator fun invoke(plainContact: PlainContact) {
         val localKey: ContactLocalKey = bubblesCryptoRepository.generateLocalKeyForContact()
@@ -49,7 +49,7 @@ class CreateContactUseCase @Inject constructor(
             sharedConversationId = plainContact.sharedConversationId,
             encSharingMode = bubblesCryptoRepository.localEncrypt(localKey, EncryptEntry(plainContact.sharingMode)),
             consultedAt = clock.now(),
-            safeId = safeRepository.currentSafeId(),
+            safeId = bubblesSafeRepository.currentSafeId(),
         )
         contactRepository.save(contact, localKey)
     }

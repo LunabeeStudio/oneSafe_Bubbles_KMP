@@ -16,20 +16,29 @@
 
 package studio.lunabee.bubbles.di
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.dsl.module
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
-import studio.lunabee.bubbles.domain.repository.SafeRepository
 import studio.lunabee.bubbles.repository.ContactKeyRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactRepositoryImpl
 
 fun bubblesRepositoryModule(
     bubblesCryptoRepository: BubblesCryptoRepository,
-    safeRepository: SafeRepository,
+    bubblesSafeRepository: BubblesSafeRepository,
 ) = module {
     single<ContactKeyRepository> { ContactKeyRepositoryImpl(get()) }
     single<BubblesCryptoRepository> { bubblesCryptoRepository }
     single<ContactRepository> { ContactRepositoryImpl(get()) }
-    single<SafeRepository> { safeRepository }
+    single<BubblesSafeRepository> { bubblesSafeRepository }
+}
+
+class BubblesRepositories : KoinComponent {
+    val contactKeyRepository: ContactKeyRepository by inject()
+    val bubblesCryptoRepository: BubblesCryptoRepository by inject()
+    val contactRepository: ContactRepository by inject()
+    val bubblesSafeRepository: BubblesSafeRepository by inject()
 }

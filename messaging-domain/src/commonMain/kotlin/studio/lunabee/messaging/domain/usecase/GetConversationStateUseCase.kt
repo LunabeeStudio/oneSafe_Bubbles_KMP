@@ -21,10 +21,10 @@ package studio.lunabee.messaging.domain.usecase
 
 import com.lunabee.lbcore.model.LBResult
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.bubbles.error.BubblesMessagingError
 import studio.lunabee.doubleratchet.model.Conversation
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.extension.getOrThrow
 import studio.lunabee.messaging.domain.model.ConversationState
 import studio.lunabee.messaging.domain.repository.ConversationRepository
@@ -33,7 +33,7 @@ class GetConversationStateUseCase @Inject constructor(
     private val conversationRepository: ConversationRepository,
     private val getHandShakeDataUseCase: GetHandShakeDataUseCase,
 ) {
-    suspend operator fun invoke(id: ConversationId): LBResult<ConversationState> = BubblesError.runCatching {
+    suspend operator fun invoke(id: DoubleRatchetUUID): LBResult<ConversationState> = BubblesError.runCatching {
         val conversation: Conversation? = conversationRepository.getConversation(id)
         when {
             // Conversation does not exist

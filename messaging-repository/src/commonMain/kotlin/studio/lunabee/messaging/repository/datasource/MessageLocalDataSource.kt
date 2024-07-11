@@ -20,22 +20,20 @@
 package studio.lunabee.messaging.repository.datasource
 
 import kotlinx.coroutines.flow.Flow
-import studio.lunabee.bubbles.domain.model.contact.ContactId
-import studio.lunabee.messaging.domain.model.MessageId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.MessageOrder
 import studio.lunabee.messaging.domain.model.SafeMessage
 
 interface MessageLocalDataSource {
     suspend fun save(message: SafeMessage, order: Float)
-    suspend fun getAllByContact(contactId: ContactId): List<SafeMessage>
-    suspend fun getLastMessage(contactId: ContactId): Flow<SafeMessage?>
-    suspend fun getLastByContact(contactId: ContactId, exceptIds: List<MessageId>): MessageOrder?
-    suspend fun getFirstByContact(contactId: ContactId, exceptIds: List<MessageId>): MessageOrder?
-    suspend fun countByContact(contactId: ContactId, exceptIds: List<MessageId>): Int
-    suspend fun getAtByContact(position: Int, contactId: ContactId, exceptIds: List<MessageId>): MessageOrder?
-    suspend fun getByContactByOrder(contactId: ContactId, order: Float): SafeMessage
-    suspend fun deleteAllMessages(contactId: ContactId)
-    suspend fun deleteMessage(messageId: MessageId)
-    suspend fun markMessagesAsRead(contactId: ContactId)
-    // fun getAllPaged(config: PagingConfig, contactId: ContactId): Flow<PagingData<SafeMessage>>
+    suspend fun getAllByContact(contactId: DoubleRatchetUUID): List<SafeMessage>
+    suspend fun getLastMessage(contactId: DoubleRatchetUUID): Flow<SafeMessage?>
+    suspend fun getLastByContact(contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): MessageOrder?
+    suspend fun getFirstByContact(contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): MessageOrder?
+    suspend fun countByContact(contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): Int
+    suspend fun getAtByContact(position: Int, contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): MessageOrder?
+    suspend fun getByContactByOrder(contactId: DoubleRatchetUUID, order: Float): SafeMessage
+    suspend fun deleteAllMessages(contactId: DoubleRatchetUUID)
+    suspend fun deleteMessage(messageId: DoubleRatchetUUID)
+    suspend fun markMessagesAsRead(contactId: DoubleRatchetUUID)
 }

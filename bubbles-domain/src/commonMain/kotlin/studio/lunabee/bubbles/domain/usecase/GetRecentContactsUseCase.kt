@@ -26,10 +26,10 @@ import kotlinx.coroutines.flow.flowOf
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.contact.Contact
 import studio.lunabee.bubbles.domain.repository.ContactRepository
-import studio.lunabee.bubbles.domain.repository.SafeRepository
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 
 class GetRecentContactsUseCase @Inject constructor(
-    private val safeRepository: SafeRepository,
+    private val bubblesSafeRepository: BubblesSafeRepository,
     private val bubblesContactRepository: ContactRepository,
 ) {
     /**
@@ -40,7 +40,7 @@ class GetRecentContactsUseCase @Inject constructor(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(maxNumber: Int): Flow<List<Contact>> {
-        return safeRepository.currentSafeIdFlow().flatMapLatest { safeId ->
+        return bubblesSafeRepository.currentSafeIdFlow().flatMapLatest { safeId ->
             safeId?.let {
                 bubblesContactRepository.getRecentContactsFlow(maxNumber, safeId)
             } ?: flowOf(emptyList())

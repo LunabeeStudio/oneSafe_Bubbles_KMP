@@ -25,6 +25,7 @@ import studio.lunabee.messaging.domain.repository.EnqueuedMessageRepository
 import studio.lunabee.messaging.domain.repository.HandShakeDataRepository
 import studio.lunabee.messaging.domain.repository.MessageChannelRepository
 import studio.lunabee.messaging.domain.repository.MessageOrderRepository
+import studio.lunabee.messaging.domain.repository.MessagePagingRepository
 import studio.lunabee.messaging.domain.repository.MessageRepository
 import studio.lunabee.messaging.domain.repository.SentMessageRepository
 import studio.lunabee.messaging.repository.ConversationRepositoryImpl
@@ -32,6 +33,7 @@ import studio.lunabee.messaging.repository.EnqueuedMessageRepositoryImpl
 import studio.lunabee.messaging.repository.HandShakeDataRepositoryImpl
 import studio.lunabee.messaging.repository.MessageChannelRepositoryImpl
 import studio.lunabee.messaging.repository.MessageOrderRepositoryImpl
+import studio.lunabee.messaging.repository.MessagePagingRepositoryImpl
 import studio.lunabee.messaging.repository.MessageRepositoryImpl
 import studio.lunabee.messaging.repository.SentMessageRepositoryImpl
 
@@ -56,10 +58,9 @@ internal interface MessagingRepositoryModule {
     @Binds
     fun bindMessageRepository(messageRepositoryImpl: MessageRepositoryImpl): MessageRepository
 
-    // messagingCryptoRepository: MessagingCryptoRepository
-
-    // messagingSettingsRepository: MessagingSettingsRepository
-
     @Binds
     fun bindSentMessageRepository(sentMessageRepositoryImpl: SentMessageRepositoryImpl): SentMessageRepository
+
+    @Binds
+    fun bindMessagePagingRepository(messagePagingRepositoryImpl: MessagePagingRepositoryImpl): MessagePagingRepository
 }

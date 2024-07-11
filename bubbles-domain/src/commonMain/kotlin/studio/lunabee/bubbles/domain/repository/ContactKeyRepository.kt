@@ -19,9 +19,9 @@
 
 package studio.lunabee.bubbles.domain.repository
 
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 interface ContactKeyRepository {
-    suspend fun getContactLocalKey(contactId: ContactId): ContactLocalKey
+    suspend fun getContactLocalKey(contactId: DoubleRatchetUUID): ContactLocalKey
 }

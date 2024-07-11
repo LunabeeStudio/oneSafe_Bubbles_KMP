@@ -23,9 +23,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.bubbles.domain.model.MessageSharingMode
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contact.PlainContact
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.usecase.CreateContactUseCase
@@ -53,31 +51,37 @@ class AcceptInvitationUseCase @Inject constructor(
      * @return the id of the contact created
      */
     @OptIn(ExperimentalSerializationApi::class)
-    suspend operator fun invoke(contactName: String, sharingMode: MessageSharingMode, invitationMessage: ByteArray): ContactId {
+    suspend operator fun invoke(contactName: String, sharingMode: MessageSharingMode, invitationMessage: ByteArray): DoubleRatchetUUID {
         val invitationMessageProto = try {
             ProtoBuf.decodeFromByteArray<ProtoInvitationMessage>(invitationMessage)
         } catch (e: Exception) {
             throw BubblesDomainError(BubblesDomainError.Code.NOT_AN_INVITATION_MESSAGE)
+        } catch (e: IllegalArgumentException) {
+            throw BubblesDomainError(BubblesDomainError.Code.NOT_AN_INVITATION_MESSAGE)
         }
+        println("message -> $invitationMessageProto")
         val contactId = createRandomUUID()
         val keyPair = doubleRatchetKeyRepository.generateKeyPair()
         val sharedSecretKey = doubleRatchetKeyRepository.createDiffieHellmanSharedSecret(
             DRPublicKey(invitationMessageProto.oneSafePublicKey),
             keyPair.privateKey,
         )
-        createContactUseCase(
+        println("message -> $sharedSecretKey")
+        val contact = createContactUseCase(
             PlainContact(
-                id = ContactId(contactId),
+                id = contactId,
                 name = contactName,
                 sharedKey = sharedSecretKey.value,
-                sharedConversationId = ConversationId(DoubleRatchetUUID(invitationMessageProto.conversationId)),
+                sharedConversationId = DoubleRatchetUUID(invitationMessageProto.conversationId),
                 sharingMode = sharingMode,
             ),
         )
+        println("message -> $contact")
         val sharedSalt = bubblesCryptoRepository.deriveUUIDToKey(
             DoubleRatchetUUID(invitationMessageProto.conversationId),
             doubleRatchetKeyRepository.rootKeyByteSize,
         )
+        println("message -> $sharedSalt")
         doubleRatchetEngine.createNewConversationFromInvitation(
             sharedSalt = DRSharedSecret(sharedSalt),
             contactPublicKey = DRPublicKey(invitationMessageProto.doubleRatchetPublicKey),
@@ -85,13 +89,13 @@ class AcceptInvitationUseCase @Inject constructor(
         )
 
         val handShakeData = HandShakeData(
-            conversationLocalId = ConversationId(contactId),
+            conversationLocalId = contactId,
             oneSafePublicKey = keyPair.publicKey.value,
             oneSafePrivateKey = null,
-            conversationSharedId = ConversationId(DoubleRatchetUUID(invitationMessageProto.conversationId)),
+            conversationSharedId = DoubleRatchetUUID(invitationMessageProto.conversationId),
         )
-
+        println("message -> $handShakeData")
         insertHandShakeDataUseCase(handShakeData)
-        return ContactId(contactId)
+        return contactId
     }
 }

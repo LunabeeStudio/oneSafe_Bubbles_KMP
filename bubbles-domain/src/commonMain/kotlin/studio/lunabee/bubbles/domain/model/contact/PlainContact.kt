@@ -16,13 +16,13 @@
 
 package studio.lunabee.bubbles.domain.model.contact
 
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.bubbles.domain.model.MessageSharingMode
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class PlainContact(
-    val id: ContactId,
+    val id: DoubleRatchetUUID,
     val name: String,
     val sharedKey: ByteArray?,
-    val sharedConversationId: ConversationId,
+    val sharedConversationId: DoubleRatchetUUID,
     val sharingMode: MessageSharingMode = MessageSharingMode.CypherText,
 )

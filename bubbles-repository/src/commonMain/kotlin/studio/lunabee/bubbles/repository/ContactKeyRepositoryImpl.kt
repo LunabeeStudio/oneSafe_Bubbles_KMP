@@ -20,15 +20,15 @@
 package studio.lunabee.bubbles.repository
 
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class ContactKeyRepositoryImpl @Inject constructor(
     private val localDataSource: ContactKeyLocalDataSource,
 ) : ContactKeyRepository {
 
-    override suspend fun getContactLocalKey(contactId: ContactId): ContactLocalKey =
+    override suspend fun getContactLocalKey(contactId: DoubleRatchetUUID): ContactLocalKey =
         localDataSource.getContactLocalKey(contactId)
 }

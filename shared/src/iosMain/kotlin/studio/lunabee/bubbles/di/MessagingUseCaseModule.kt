@@ -16,6 +16,8 @@
 
 package studio.lunabee.bubbles.di
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import studio.lunabee.messaging.domain.MessageOrderCalculator
@@ -60,4 +62,27 @@ val messagingUseCaseModule = module {
     singleOf(::SaveMessageUseCase)
     singleOf(::SaveSentMessageUseCase)
     singleOf(::MessageOrderCalculator)
+}
+
+class MessagingUseCases : KoinComponent {
+    val acceptInvitationUseCase: AcceptInvitationUseCase by inject()
+    val createInvitationUseCase: CreateInvitationUseCase by inject()
+    val cryptoHandShakeDataUseCase: CryptoHandShakeDataUseCase by inject()
+    val decryptIncomingMessageUseCase: DecryptIncomingMessageUseCase by inject()
+    val decryptSafeMessageUseCase: DecryptSafeMessageUseCase by inject()
+    val encryptMessageUseCase: EncryptMessageUseCase by inject()
+    val enqueueMessageUseCase: EnqueueMessageUseCase by inject()
+    val getConversationStateUseCase: GetConversationStateUseCase by inject()
+    val getHandShakeDataUseCase: GetHandShakeDataUseCase by inject()
+    val getInvitationMessageUseCase: GetInvitationMessageUseCase by inject()
+    val getInvitationResponseMessageUseCase: GetInvitationResponseMessageUseCase by inject()
+    val getSendMessageDataUseCase: GetSendMessageDataUseCase by inject()
+    val handleIncomingMessageUseCase: HandleIncomingMessageUseCase by inject()
+    val insertHandShakeDataUseCase: InsertHandShakeDataUseCase by inject()
+    val manageIncomingMessageUseCase: ManageIncomingMessageUseCase by inject()
+    val processMessageQueueUseCase: ProcessMessageQueueUseCase by inject()
+    val removeOldSentMessagesUseCase: RemoveOldSentMessagesUseCase by inject()
+    val saveMessageUseCase: SaveMessageUseCase by inject()
+    val saveSentMessageUseCase: SaveSentMessageUseCase by inject()
+    val messageOrderCalculator: MessageOrderCalculator by inject()
 }

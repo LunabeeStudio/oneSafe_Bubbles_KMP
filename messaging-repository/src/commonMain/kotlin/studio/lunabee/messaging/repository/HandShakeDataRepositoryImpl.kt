@@ -20,7 +20,7 @@
 package studio.lunabee.messaging.repository
 
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.EncHandShakeData
 import studio.lunabee.messaging.domain.repository.HandShakeDataRepository
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
@@ -32,11 +32,11 @@ class HandShakeDataRepositoryImpl @Inject constructor(
         handShakeDataLocalDatasource.insert(handShakeData)
     }
 
-    override suspend fun delete(conversationLocalId: ConversationId) {
+    override suspend fun delete(conversationLocalId: DoubleRatchetUUID) {
         handShakeDataLocalDatasource.delete(conversationLocalId)
     }
 
-    override suspend fun getById(conversationLocalId: ConversationId): EncHandShakeData? {
+    override suspend fun getById(conversationLocalId: DoubleRatchetUUID): EncHandShakeData? {
         return handShakeDataLocalDatasource.getById(conversationLocalId)
     }
 }

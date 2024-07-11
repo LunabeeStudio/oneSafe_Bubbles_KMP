@@ -19,11 +19,11 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.domain.model.contact.ContactId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.MessageHeader
 
 data class OSEncryptedMessage(
     val body: ByteArray,
     val messageHeader: MessageHeader,
-    val recipientId: ContactId,
+    val recipientId: DoubleRatchetUUID,
 )

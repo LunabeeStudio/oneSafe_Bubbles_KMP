@@ -19,11 +19,11 @@
 
 package studio.lunabee.messaging.repository.datasource
 
-import studio.lunabee.bubbles.domain.model.ConversationId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.EncHandShakeData
 
 interface HandShakeDataLocalDatasource {
     suspend fun insert(handShakeData: EncHandShakeData)
-    suspend fun delete(conversationLocalId: ConversationId)
-    suspend fun getById(conversationLocalId: ConversationId): EncHandShakeData?
+    suspend fun delete(conversationLocalId: DoubleRatchetUUID)
+    suspend fun getById(conversationLocalId: DoubleRatchetUUID): EncHandShakeData?
 }

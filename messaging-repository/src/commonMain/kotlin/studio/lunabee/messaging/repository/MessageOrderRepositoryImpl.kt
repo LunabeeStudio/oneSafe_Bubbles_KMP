@@ -17,8 +17,7 @@
 package studio.lunabee.messaging.repository
 
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.contact.ContactId
-import studio.lunabee.messaging.domain.model.MessageId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.MessageOrder
 import studio.lunabee.messaging.domain.repository.MessageOrderRepository
 import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
@@ -26,17 +25,27 @@ import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
 class MessageOrderRepositoryImpl @Inject constructor(
     private val datasource: MessageLocalDataSource,
 ) : MessageOrderRepository {
-    override suspend fun getMostRecent(contactId: ContactId, exceptIds: List<MessageId>): MessageOrder? = datasource.getLastByContact(
+    override suspend fun getMostRecent(
+        contactId: DoubleRatchetUUID,
+        exceptIds: List<DoubleRatchetUUID>,
+    ): MessageOrder? = datasource.getLastByContact(
         contactId,
         exceptIds,
     )
 
-    override suspend fun getLeastRecent(contactId: ContactId, exceptIds: List<MessageId>): MessageOrder? = datasource.getFirstByContact(
+    override suspend fun getLeastRecent(
+        contactId: DoubleRatchetUUID,
+        exceptIds: List<DoubleRatchetUUID>,
+    ): MessageOrder? = datasource.getFirstByContact(
         contactId,
         exceptIds,
     )
 
-    override suspend fun count(contactId: ContactId, exceptIds: List<MessageId>): Int = datasource.countByContact(contactId, exceptIds)
-    override suspend fun getAt(contactId: ContactId, position: Int, exceptIds: List<MessageId>): MessageOrder? =
+    override suspend fun count(contactId: DoubleRatchetUUID, exceptIds: List<DoubleRatchetUUID>): Int = datasource.countByContact(
+        contactId,
+        exceptIds,
+    )
+
+    override suspend fun getAt(contactId: DoubleRatchetUUID, position: Int, exceptIds: List<DoubleRatchetUUID>): MessageOrder? =
         datasource.getAtByContact(position, contactId, exceptIds)
 }

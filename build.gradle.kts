@@ -39,6 +39,7 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         mavenCentral()
         maven {
             url = uri("https://artifactory.lunabee.studio/artifactory/double-ratchet-kmm/")

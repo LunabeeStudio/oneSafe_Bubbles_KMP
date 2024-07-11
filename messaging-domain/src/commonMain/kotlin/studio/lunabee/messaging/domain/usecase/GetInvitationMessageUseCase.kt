@@ -24,14 +24,13 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.messaging.domain.extension.getOrThrow
-import studio.lunabee.bubbles.domain.model.ConversationId
-import studio.lunabee.bubbles.domain.model.contact.ContactId
-import studio.lunabee.messaging.domain.model.proto.ProtoInvitationMessage
 import studio.lunabee.bubbles.error.BubblesDomainError
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.bubbles.error.BubblesMessagingError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
+import studio.lunabee.messaging.domain.extension.getOrThrow
+import studio.lunabee.messaging.domain.model.proto.ProtoInvitationMessage
 
 class GetInvitationMessageUseCase @Inject constructor(
     private val doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
@@ -39,17 +38,17 @@ class GetInvitationMessageUseCase @Inject constructor(
 ) {
 
     @OptIn(ExperimentalSerializationApi::class)
-    suspend operator fun invoke(contactId: ContactId): LBResult<ByteArray> = BubblesError.runCatching {
-        val conversationId = ConversationId(contactId.value)
-        val handShakeData = getHandShakeDataUseCase(conversationLocalId = conversationId).getOrThrow()
+    suspend operator fun invoke(contactId: DoubleRatchetUUID): LBResult<ByteArray> = BubblesError.runCatching {
+        val handShakeData = getHandShakeDataUseCase(conversationLocalId = contactId).getOrThrow()
             ?: throw BubblesMessagingError(BubblesMessagingError.Code.HANDSHAKE_DATA_NOT_FOUND)
-        val conversation = doubleRatchetLocalDatasource.getConversation(conversationId.value)
+        val conversation = doubleRatchetLocalDatasource.getConversation(contactId)
             ?: throw BubblesDomainError(BubblesDomainError.Code.NO_MATCHING_CONTACT)
+        println("message -> recipient -> ${handShakeData.conversationLocalId.uuidString()}")
         val invitationProto = ProtoInvitationMessage(
             doubleRatchetPublicKey = conversation.personalKeyPair.publicKey.value,
             oneSafePublicKey = handShakeData.oneSafePublicKey ?: byteArrayOf(),
-            conversationId = handShakeData.conversationSharedId.toString(),
-            recipientId = handShakeData.conversationLocalId.toString(),
+            conversationId = handShakeData.conversationSharedId.uuidString(),
+            recipientId = handShakeData.conversationLocalId.uuidString(),
         )
         ProtoBuf.encodeToByteArray(invitationProto)
     }
