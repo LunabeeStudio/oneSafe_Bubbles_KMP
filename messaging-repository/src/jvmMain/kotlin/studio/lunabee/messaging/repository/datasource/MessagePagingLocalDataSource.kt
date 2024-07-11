@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Created by Lunabee Studio / Date - 6/6/2024 - for the oneSafe6 SDK.
- * Last modified 6/6/24, 3:29 PM
+ * Created by Lunabee Studio / Date - 7/10/2024 - for the oneSafe6 SDK.
+ * Last modified 10/07/2024 15:35
  */
 
-package studio.lunabee.bubbles.domain.repository
+package studio.lunabee.messaging.repository.datasource
 
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import studio.lunabee.bubbles.domain.model.SafeId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
+import studio.lunabee.messaging.domain.model.SafeMessage
 
-interface SafeRepository {
-    suspend fun currentSafeId(): SafeId
-    fun currentSafeIdFlow(): Flow<SafeId?>
+interface MessagePagingLocalDataSource {
+    fun getAllPaged(config: PagingConfig, contactId: DoubleRatchetUUID): Flow<PagingData<SafeMessage>>
 }

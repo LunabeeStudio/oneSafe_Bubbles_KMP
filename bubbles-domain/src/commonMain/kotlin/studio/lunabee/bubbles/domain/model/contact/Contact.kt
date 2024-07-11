@@ -17,17 +17,16 @@
 package studio.lunabee.bubbles.domain.model.contact
 
 import kotlinx.datetime.Instant
-import studio.lunabee.bubbles.domain.model.ConversationId
-import studio.lunabee.bubbles.domain.model.SafeId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactSharedKey
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 data class Contact(
-    val id: ContactId,
+    val id: DoubleRatchetUUID,
     val encName: ByteArray,
     val encSharedKey: ContactSharedKey?,
     val updatedAt: Instant,
     val encSharingMode: ByteArray,
-    val sharedConversationId: ConversationId,
+    val sharedConversationId: DoubleRatchetUUID,
     val consultedAt: Instant?,
-    val safeId: SafeId,
+    val safeId: DoubleRatchetUUID,
 )

@@ -24,12 +24,12 @@ import kotlinx.datetime.Clock
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.EncryptEntry
 import studio.lunabee.bubbles.domain.model.MessageSharingMode
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
 import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class UpdateMessageSharingModeContactUseCase @Inject constructor(
     private val contactRepository: ContactRepository,
@@ -37,7 +37,7 @@ class UpdateMessageSharingModeContactUseCase @Inject constructor(
     private val bubblesCryptoRepository: BubblesCryptoRepository,
     private val clock: Clock,
 ) {
-    suspend operator fun invoke(id: ContactId, sharingMode: MessageSharingMode): LBResult<Unit> = BubblesError.runCatching {
+    suspend operator fun invoke(id: DoubleRatchetUUID, sharingMode: MessageSharingMode): LBResult<Unit> = BubblesError.runCatching {
         val localKey: ContactLocalKey = contactKeyRepository.getContactLocalKey(id)
         contactRepository.updateMessageSharingMode(
             id = id,

@@ -27,15 +27,14 @@ import studio.lunabee.messaging.domain.MessageOrderCalculator
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.DecryptEntry
 import studio.lunabee.bubbles.domain.model.EncryptEntry
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
 import studio.lunabee.bubbles.domain.usecase.GetContactUseCase
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.bubbles.error.BubblesMessagingError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.MessageDirection
-import studio.lunabee.messaging.domain.model.MessageId
 import studio.lunabee.messaging.domain.model.SafeMessage
 import studio.lunabee.messaging.domain.model.SharedMessage
 import studio.lunabee.messaging.domain.repository.MessageRepository
@@ -54,9 +53,9 @@ class SaveMessageUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         plainMessage: SharedMessage,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
         channel: String?,
-        id: MessageId,
+        id: DoubleRatchetUUID,
     ): LBResult<Float> = BubblesError.runCatching {
         mutex.withLock {
             val recipient = getContactUseCase(plainMessage.recipientId)

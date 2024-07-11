@@ -19,28 +19,28 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.error.BubbleDoubleRatchetError
 import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 sealed interface DecryptResult {
-    val contactId: ContactId
+    val contactId: DoubleRatchetUUID
     val error: Error?
 
     data class NewMessage(
-        override val contactId: ContactId,
+        override val contactId: DoubleRatchetUUID,
     ) : DecryptResult {
         override val error: Error? = null
     }
 
     data class OwnMessage(
-        override val contactId: ContactId,
+        override val contactId: DoubleRatchetUUID,
     ) : DecryptResult {
         override val error: Error = Error.OWN_MESSAGE
     }
 
     data class AlreadyDecrypted(
-        override val contactId: ContactId,
+        override val contactId: DoubleRatchetUUID,
     ) : DecryptResult {
         override val error: Error = Error.ALREADY_DECRYPTED
     }

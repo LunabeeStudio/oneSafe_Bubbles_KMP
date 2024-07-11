@@ -21,8 +21,7 @@ package studio.lunabee.messaging.repository
 
 import kotlinx.coroutines.flow.Flow
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.contact.ContactId
-import studio.lunabee.messaging.domain.model.MessageId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.SafeMessage
 import studio.lunabee.messaging.domain.repository.MessageRepository
 import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
@@ -31,21 +30,25 @@ class MessageRepositoryImpl @Inject constructor(
     private val datasource: MessageLocalDataSource,
 ) : MessageRepository {
     override suspend fun save(message: SafeMessage, order: Float): Unit = datasource.save(message, order)
-    override suspend fun getAllByContact(contactId: ContactId): List<SafeMessage> = datasource.getAllByContact(contactId)
-    override suspend fun getLastMessage(contactId: ContactId): Flow<SafeMessage?> {
+    override suspend fun getAllByContact(contactId: DoubleRatchetUUID): List<SafeMessage> = datasource.getAllByContact(contactId)
+    override suspend fun getLastMessage(contactId: DoubleRatchetUUID): Flow<SafeMessage?> {
         return datasource.getLastMessage(contactId)
     }
 
-    override suspend fun getByContactByOrder(contactId: ContactId, order: Float): SafeMessage = datasource.getByContactByOrder(
+    override suspend fun getByContactByOrder(contactId: DoubleRatchetUUID, order: Float): SafeMessage = datasource.getByContactByOrder(
         contactId,
         order,
     )
 
-    // override fun getAllPaged(config: PagingConfig, contactId: UUID): Flow<PagingData<SafeMessage>> =
-    //    datasource.getAllPaged(config, contactId)
+    override suspend fun deleteAllMessages(contactId: DoubleRatchetUUID) {
+        datasource.deleteAllMessages(contactId)
+    }
 
-    override suspend fun deleteAllMessages(contactId: ContactId) { datasource.deleteAllMessages(contactId) }
+    override suspend fun deleteMessage(messageId: DoubleRatchetUUID) {
+        datasource.deleteMessage(messageId)
+    }
 
-    override suspend fun deleteMessage(messageId: MessageId) { datasource.deleteMessage(messageId) }
-    override suspend fun markMessagesAsRead(contactId: ContactId) { datasource.markMessagesAsRead(contactId) }
+    override suspend fun markMessagesAsRead(contactId: DoubleRatchetUUID) {
+        datasource.markMessagesAsRead(contactId)
+    }
 }

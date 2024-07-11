@@ -20,13 +20,13 @@
 package studio.lunabee.messaging.domain.model
 
 import kotlinx.datetime.Instant
-import studio.lunabee.bubbles.domain.model.contact.ContactId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 /**
  * Plain message for sending and receiving messages
  */
 data class SharedMessage(
     val content: String,
-    val recipientId: ContactId,
+    val recipientId: DoubleRatchetUUID,
     val sentAt: Instant,
 )

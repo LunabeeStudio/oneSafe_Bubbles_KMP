@@ -25,13 +25,12 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.bubbles.error.BubblesMessagingError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.MessageHeader
 import studio.lunabee.doubleratchet.model.SendMessageData
 import studio.lunabee.messaging.domain.model.HandShakeData
@@ -54,7 +53,7 @@ class EncryptMessageUseCase @Inject constructor(
     @OptIn(ExperimentalSerializationApi::class)
     suspend operator fun invoke(
         plainMessage: String,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
         sentAt: Instant,
         sendMessageData: SendMessageData,
     ): LBResult<ByteArray> = BubblesError.runCatching {
@@ -65,7 +64,7 @@ class EncryptMessageUseCase @Inject constructor(
         val byteArrayMessage = ProtoBuf.encodeToByteArray(messageBody)
         // Encrypt the message body with the message Key
         val encryptedMessageBody: ByteArray = messagingCryptoRepository.encryptMessage(byteArrayMessage, sendMessageData.messageKey)
-        val handShakeDataRes: LBResult<HandShakeData?> = getHandShakeDataUseCase(ConversationId(contactId.value))
+        val handShakeDataRes: LBResult<HandShakeData?> = getHandShakeDataUseCase(contactId)
         when (handShakeDataRes) {
             is LBResult.Failure -> return LBResult.Failure(handShakeDataRes.throwable)
             is LBResult.Success -> {
@@ -92,7 +91,7 @@ class EncryptMessageUseCase @Inject constructor(
     private suspend fun createEncryptedMessage(
         encryptedMessageBody: ByteArray,
         messageHeader: MessageHeader,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
     ): ByteArray {
         val sharedKey = contactRepository.getSharedKey(contactId)
             ?: throw BubblesMessagingError(BubblesMessagingError.Code.CONTACT_NOT_FOUND)
@@ -104,7 +103,7 @@ class EncryptMessageUseCase @Inject constructor(
                 sequenceMessageNumber = messageHeader.sequenceNumber,
                 publicKey = messageHeader.publicKey.value,
             ),
-            recipientId = contactId.value.uuidString(),
+            recipientId = contactId.uuidString(),
         )
         val messageByteArray = ProtoBuf.encodeToByteArray(message)
         return bubblesCryptoRepository.sharedEncrypt(messageByteArray, localKey, sharedKey)
@@ -114,7 +113,7 @@ class EncryptMessageUseCase @Inject constructor(
     private fun createHandShakeMessage(
         encryptedMessageBody: ByteArray,
         messageHeader: MessageHeader,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
         handShakeData: HandShakeData,
     ): ByteArray {
         val message = ProtoHandShakeMessage(
@@ -124,9 +123,9 @@ class EncryptMessageUseCase @Inject constructor(
                 sequenceMessageNumber = messageHeader.sequenceNumber,
                 publicKey = messageHeader.publicKey.value,
             ),
-            conversationId = handShakeData.conversationSharedId.toString(),
+            conversationId = handShakeData.conversationSharedId.uuidString(),
             oneSafePublicKey = handShakeData.oneSafePublicKey!!,
-            recipientId = contactId.toString(),
+            recipientId = contactId.uuidString(),
         )
         return ProtoBuf.encodeToByteArray(message)
     }

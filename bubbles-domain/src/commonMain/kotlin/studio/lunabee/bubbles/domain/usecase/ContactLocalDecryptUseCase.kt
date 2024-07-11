@@ -22,10 +22,10 @@ package studio.lunabee.bubbles.domain.usecase
 import com.lunabee.lbcore.model.LBResult
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.DecryptEntry
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import kotlin.reflect.KClass
 
 // TODO <bubbles> invoke overload to decrypt an array of data without retrieving the key for each data (see EncryptFieldsUseCase)
@@ -47,7 +47,7 @@ class ContactLocalDecryptUseCase @Inject constructor(
      *
      * @return Plain data wrapped in a [LBResult]
      */
-    suspend operator fun <Data : Any> invoke(data: ByteArray, contactId: ContactId, clazz: KClass<Data>): LBResult<Data> {
+    suspend operator fun <Data : Any> invoke(data: ByteArray, contactId: DoubleRatchetUUID, clazz: KClass<Data>): LBResult<Data> {
         return BubblesError.runCatching {
             val key = contactKeyRepository.getContactLocalKey(contactId)
             bubblesCryptoRepository.localDecrypt(key, DecryptEntry(data, clazz))

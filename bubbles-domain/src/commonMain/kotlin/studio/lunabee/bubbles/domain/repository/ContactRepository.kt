@@ -21,23 +21,22 @@ package studio.lunabee.bubbles.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Instant
-import studio.lunabee.bubbles.domain.model.SafeId
 import studio.lunabee.bubbles.domain.model.contact.Contact
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.model.contactkey.ContactSharedKey
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 interface ContactRepository {
     suspend fun save(contact: Contact, key: ContactLocalKey)
-    fun getAllContactsFlow(safeId: SafeId): Flow<List<Contact>>
-    fun getRecentContactsFlow(maxNumber: Int, safeId: SafeId): Flow<List<Contact>>
-    fun getContactFlow(id: ContactId): Flow<Contact?>
-    suspend fun getContact(id: ContactId): Contact?
-    suspend fun getSharedKey(id: ContactId): ContactSharedKey?
-    suspend fun addContactSharedKey(id: ContactId, sharedKey: ContactSharedKey)
-    suspend fun deleteContact(id: ContactId)
-    suspend fun updateMessageSharingMode(id: ContactId, encSharingMode: ByteArray, updateAt: Instant)
-    suspend fun updateUpdatedAt(id: ContactId, updateAt: Instant)
-    suspend fun updateContact(id: ContactId, encSharingMode: ByteArray, encName: ByteArray, updateAt: Instant)
-    suspend fun updateContactConsultedAt(id: ContactId, consultedAt: Instant)
+    fun getAllContactsFlow(safeId: DoubleRatchetUUID): Flow<List<Contact>>
+    fun getRecentContactsFlow(maxNumber: Int, safeId: DoubleRatchetUUID): Flow<List<Contact>>
+    fun getContactFlow(id: DoubleRatchetUUID): Flow<Contact?>
+    suspend fun getContact(id: DoubleRatchetUUID): Contact?
+    suspend fun getSharedKey(id: DoubleRatchetUUID): ContactSharedKey?
+    suspend fun addContactSharedKey(id: DoubleRatchetUUID, sharedKey: ContactSharedKey)
+    suspend fun deleteContact(id: DoubleRatchetUUID)
+    suspend fun updateMessageSharingMode(id: DoubleRatchetUUID, encSharingMode: ByteArray, updateAt: Instant)
+    suspend fun updateUpdatedAt(id: DoubleRatchetUUID, updateAt: Instant)
+    suspend fun updateContact(id: DoubleRatchetUUID, encSharingMode: ByteArray, encName: ByteArray, updateAt: Instant)
+    suspend fun updateContactConsultedAt(id: DoubleRatchetUUID, consultedAt: Instant)
 }

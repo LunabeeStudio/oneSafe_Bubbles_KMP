@@ -22,12 +22,12 @@ package studio.lunabee.bubbles.domain.usecase
 import kotlinx.coroutines.flow.Flow
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.contact.Contact
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.repository.ContactRepository
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class GetContactUseCase @Inject constructor(
     private val contactRepository: ContactRepository,
 ) {
-    suspend operator fun invoke(id: ContactId): Contact? = contactRepository.getContact(id)
-    fun flow(id: ContactId): Flow<Contact?> = contactRepository.getContactFlow(id)
+    suspend operator fun invoke(id: DoubleRatchetUUID): Contact? = contactRepository.getContact(id)
+    fun flow(id: DoubleRatchetUUID): Flow<Contact?> = contactRepository.getContactFlow(id)
 }

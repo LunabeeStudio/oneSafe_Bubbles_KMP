@@ -21,16 +21,16 @@ package studio.lunabee.messaging.domain.usecase
 
 import com.lunabee.lbcore.model.LBResult
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.messaging.domain.model.HandShakeData
 import studio.lunabee.messaging.domain.repository.HandShakeDataRepository
 import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 class GetHandShakeDataUseCase @Inject constructor(
     private val handShakeDataRepository: HandShakeDataRepository,
     private val cryptoHandShakeDataUseCase: CryptoHandShakeDataUseCase,
 ) {
-    suspend operator fun invoke(conversationLocalId: ConversationId): LBResult<HandShakeData?> = BubblesError.runCatching {
+    suspend operator fun invoke(conversationLocalId: DoubleRatchetUUID): LBResult<HandShakeData?> = BubblesError.runCatching {
         handShakeDataRepository.getById(conversationLocalId)?.let { encHandShakeData ->
             cryptoHandShakeDataUseCase.decrypt(encHandShakeData)
         }

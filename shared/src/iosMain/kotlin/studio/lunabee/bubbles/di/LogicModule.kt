@@ -17,7 +17,7 @@
 package studio.lunabee.bubbles.di
 
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
-import studio.lunabee.bubbles.domain.repository.SafeRepository
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
@@ -34,11 +34,11 @@ fun logicModule(
     contactKeyLocalDataSource: ContactKeyLocalDataSource,
     contactLocalDataSource: ContactLocalDataSource,
     bubblesCryptoRepository: BubblesCryptoRepository,
-    safeRepository: SafeRepository,
+    bubblesSafeRepository: BubblesSafeRepository,
 ) = listOf(
     bubblesRepositoryModule(
         bubblesCryptoRepository = bubblesCryptoRepository,
-        safeRepository = safeRepository,
+        bubblesSafeRepository = bubblesSafeRepository,
     ),
     bubblesDatasourceModule(
         contactKeyLocalDataSource = contactKeyLocalDataSource,

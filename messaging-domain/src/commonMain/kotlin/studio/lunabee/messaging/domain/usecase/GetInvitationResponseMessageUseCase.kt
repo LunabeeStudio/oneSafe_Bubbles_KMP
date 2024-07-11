@@ -23,7 +23,7 @@ import com.lunabee.lbcore.model.LBResult
 import kotlinx.datetime.Clock
 import studio.lunabee.messaging.domain.MessagingConstant
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.contact.ContactId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.SendMessageData
 import studio.lunabee.messaging.domain.model.SharedMessage
 
@@ -36,8 +36,8 @@ class GetInvitationResponseMessageUseCase @Inject constructor(
     private val saveSentMessageUseCase: SaveSentMessageUseCase,
     private val clock: Clock,
 ) {
-    suspend operator fun invoke(contactId: ContactId): LBResult<ByteArray> {
-        val messageData = getSendMessageDataUseCase(contactId)
+    suspend operator fun invoke(contactId: DoubleRatchetUUID): LBResult<ByteArray> {
+        val messageData: LBResult<SendMessageData> = getSendMessageDataUseCase(contactId)
         return when (messageData) {
             is LBResult.Failure -> LBResult.Failure(messageData.throwable)
             is LBResult.Success -> getAndSaveMessageIfNeeded(contactId, messageData)
@@ -45,7 +45,7 @@ class GetInvitationResponseMessageUseCase @Inject constructor(
     }
 
     private suspend fun getAndSaveMessageIfNeeded(
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
         messageData: LBResult.Success<SendMessageData>,
     ): LBResult<ByteArray> {
         return encryptMessageUseCase(
@@ -65,7 +65,7 @@ class GetInvitationResponseMessageUseCase @Inject constructor(
 
     private suspend fun saveMessageInDatabase(
         messageData: ByteArray,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
     ) {
         saveSentMessageUseCase(
             plainMessage = SharedMessage(

@@ -20,15 +20,15 @@
 package studio.lunabee.messaging.repository
 
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.doubleratchet.model.Conversation
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 import studio.lunabee.messaging.domain.repository.ConversationRepository
 
 class ConversationRepositoryImpl @Inject constructor(
     private val doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
 ) : ConversationRepository {
-    override suspend fun getConversation(id: ConversationId): Conversation? {
-        return doubleRatchetLocalDatasource.getConversation(id.value)
+    override suspend fun getConversation(id: DoubleRatchetUUID): Conversation? {
+        return doubleRatchetLocalDatasource.getConversation(id)
     }
 }

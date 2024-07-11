@@ -25,9 +25,9 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
 import studio.lunabee.bubbles.domain.di.Inject
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.createRandomUUID
 import studio.lunabee.messaging.domain.model.DecryptResult
-import studio.lunabee.messaging.domain.model.MessageId
 import studio.lunabee.messaging.domain.model.proto.ProtoInvitationMessage
 
 /**
@@ -50,7 +50,7 @@ class ManageIncomingMessageUseCase @Inject constructor(
                             plainMessage = message,
                             contactId = contactId,
                             channel = channel,
-                            id = MessageId(createRandomUUID()),
+                            id = createRandomUUID(),
                         )
                     }
                     LBResult.Success(
@@ -67,9 +67,12 @@ class ManageIncomingMessageUseCase @Inject constructor(
     @OptIn(ExperimentalSerializationApi::class)
     private fun tryParseInvitationMessage(messageData: ByteArray): Boolean {
         return try {
-            ProtoBuf.decodeFromByteArray<ProtoInvitationMessage>(messageData)
+            val result = ProtoBuf.decodeFromByteArray<ProtoInvitationMessage>(messageData)
+            DoubleRatchetUUID(result.recipientId)
             true
         } catch (e: SerializationException) {
+            false
+        } catch (e: IllegalArgumentException) {
             false
         }
     }

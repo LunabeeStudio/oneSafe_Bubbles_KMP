@@ -19,12 +19,12 @@
 
 package studio.lunabee.messaging.repository.datasource
 
-import studio.lunabee.messaging.domain.model.MessageId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.SentMessage
 
 interface SentMessageLocalDatasource {
     suspend fun saveSentMessage(sentMessage: SentMessage)
-    suspend fun getSentMessage(id: MessageId): SentMessage?
-    suspend fun deleteSentMessage(id: MessageId)
+    suspend fun getSentMessage(id: DoubleRatchetUUID): SentMessage?
+    suspend fun deleteSentMessage(id: DoubleRatchetUUID)
     suspend fun getOldestSentMessage(): SentMessage?
 }

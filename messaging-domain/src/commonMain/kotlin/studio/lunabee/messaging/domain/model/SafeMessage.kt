@@ -19,14 +19,14 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.domain.model.contact.ContactId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 /**
  * Encrypted message for storage
  */
 data class SafeMessage(
-    val id: MessageId,
-    val fromContactId: ContactId,
+    val id: DoubleRatchetUUID,
+    val fromContactId: DoubleRatchetUUID,
     val encSentAt: ByteArray,
     val encContent: ByteArray,
     val direction: MessageDirection,

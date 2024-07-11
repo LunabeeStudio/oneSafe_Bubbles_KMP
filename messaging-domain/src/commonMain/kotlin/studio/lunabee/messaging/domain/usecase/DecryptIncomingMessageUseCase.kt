@@ -29,12 +29,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.protobuf.ProtoBuf
-import studio.lunabee.messaging.domain.MessagingConstant
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.bubbles.domain.model.EncryptEntry
 import studio.lunabee.bubbles.domain.model.contact.Contact
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.model.contactkey.ContactSharedKey
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
@@ -51,6 +48,7 @@ import studio.lunabee.doubleratchet.model.DRPublicKey
 import studio.lunabee.doubleratchet.model.DoubleRatchetError
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.MessageHeader
+import studio.lunabee.messaging.domain.MessagingConstant
 import studio.lunabee.messaging.domain.extension.asOSError
 import studio.lunabee.messaging.domain.model.DecryptIncomingMessageData
 import studio.lunabee.messaging.domain.model.OSEncryptedMessage
@@ -106,11 +104,11 @@ class DecryptIncomingMessageUseCase @Inject constructor(
         localKey: ContactLocalKey,
     ): LBResult<DecryptIncomingMessageData> = when {
         // If the sharedConversationId don't correspond to the proto conversationId, it means that its the wrong contact
-        handShakeMessage.conversationId != contact.sharedConversationId.toString() -> LBResult.Failure(
+        handShakeMessage.conversationId != contact.sharedConversationId.uuidString() -> LBResult.Failure(
             BubblesDomainError(BubblesDomainError.Code.WRONG_CONTACT),
         )
         // If recipientID equals the contact id, it mean that its a message we send that message and we can't decrypt it
-        handShakeMessage.recipientId == contact.id.toString() -> LBResult.Success(
+        handShakeMessage.recipientId == contact.id.uuidString() -> LBResult.Success(
             DecryptIncomingMessageData.DecryptOwnMessage(contact.id),
         )
         else -> BubblesError.runCatching {
@@ -144,11 +142,11 @@ class DecryptIncomingMessageUseCase @Inject constructor(
                 sequenceNumber = plainMessageProto.header.sequenceMessageNumber,
                 publicKey = DRPublicKey(plainMessageProto.header.publicKey),
             ),
-            recipientId = ContactId(DoubleRatchetUUID(plainMessageProto.recipientId)),
+            recipientId = DoubleRatchetUUID(plainMessageProto.recipientId),
         )
         // We skip the handshake step if we already did one
         if (contact.encSharedKey == null) {
-            val privateKey = getHandShakeDataUseCase(ConversationId(contact.id.value)).data?.oneSafePrivateKey!!
+            val privateKey = getHandShakeDataUseCase(contact.id).data?.oneSafePrivateKey!!
             val sharedSecret = doubleRatchetKeyRepository.createDiffieHellmanSharedSecret(
                 DRPublicKey(plainMessageProto.oneSafePublicKey),
                 DRPrivateKey(privateKey),
@@ -157,10 +155,10 @@ class DecryptIncomingMessageUseCase @Inject constructor(
             contactRepository.addContactSharedKey(contact.id, ContactSharedKey(encSharedKey))
 
             // We remove handShake data since we don't need it anymore
-            handShakeDataRepository.delete(ConversationId(contact.id.value))
+            handShakeDataRepository.delete(contact.id)
         }
         val messageKey = try {
-            doubleRatchetEngine.getReceiveKey(messageHeader = plainMessage.messageHeader, contact.id.value)
+            doubleRatchetEngine.getReceiveKey(messageHeader = plainMessage.messageHeader, contact.id)
         } catch (e: DoubleRatchetError) {
             if (e.type == DoubleRatchetError.Type.MessageKeyNotFound) {
                 return DecryptIncomingMessageData.AlreadyDecryptedMessage(contact.id)
@@ -201,17 +199,17 @@ class DecryptIncomingMessageUseCase @Inject constructor(
                 sequenceNumber = plainMessageProto.header.sequenceMessageNumber,
                 publicKey = DRPublicKey(plainMessageProto.header.publicKey),
             ),
-            recipientId = ContactId(DoubleRatchetUUID(plainMessageProto.recipientId)),
+            recipientId = DoubleRatchetUUID(plainMessageProto.recipientId),
         )
         if (plainMessage.messageHeader.messageNumber == 0) {
-            handShakeDataRepository.delete(ConversationId(contact.id.value))
+            handShakeDataRepository.delete(contact.id)
         }
 
         return when (plainMessage.recipientId) {
             contact.id -> DecryptIncomingMessageData.DecryptOwnMessage(contact.id)
             else -> {
                 val messageKey = try {
-                    doubleRatchetEngine.getReceiveKey(messageHeader = plainMessage.messageHeader, contact.id.value)
+                    doubleRatchetEngine.getReceiveKey(messageHeader = plainMessage.messageHeader, contact.id)
                 } catch (e: DoubleRatchetError) {
                     if (e.type == DoubleRatchetError.Type.MessageKeyNotFound) {
                         return DecryptIncomingMessageData.AlreadyDecryptedMessage(contact.id)
@@ -238,6 +236,8 @@ class DecryptIncomingMessageUseCase @Inject constructor(
         return try {
             ProtoBuf.decodeFromByteArray<ProtoHandShakeMessage>(messageData)
         } catch (e: SerializationException) {
+            null
+        } catch (e: IllegalArgumentException) {
             null
         }
     }

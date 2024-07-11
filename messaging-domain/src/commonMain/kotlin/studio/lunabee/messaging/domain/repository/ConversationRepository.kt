@@ -19,9 +19,9 @@
 
 package studio.lunabee.messaging.domain.repository
 
-import studio.lunabee.bubbles.domain.model.ConversationId
 import studio.lunabee.doubleratchet.model.Conversation
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 interface ConversationRepository {
-    suspend fun getConversation(id: ConversationId): Conversation?
+    suspend fun getConversation(id: DoubleRatchetUUID): Conversation?
 }

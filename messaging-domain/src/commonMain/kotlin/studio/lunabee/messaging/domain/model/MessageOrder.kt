@@ -19,8 +19,10 @@
 
 package studio.lunabee.messaging.domain.model
 
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
+
 class MessageOrder(
-    val id: MessageId,
+    val id: DoubleRatchetUUID,
     val encSentAt: ByteArray,
     val order: Float,
 )

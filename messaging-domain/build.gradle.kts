@@ -39,5 +39,9 @@ kotlin {
             implementation(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
             implementation(project(":oneSafe_Bubbles_KMP:error"))
         }
+
+        jvmMain.dependencies {
+            implementation(libs.androidx.paging.common)
+        }
     }
 }

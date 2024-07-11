@@ -19,11 +19,11 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.domain.model.ConversationId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
-class HandShakeData(
-    val conversationLocalId: ConversationId,
-    val conversationSharedId: ConversationId,
+data class HandShakeData(
+    val conversationLocalId: DoubleRatchetUUID,
+    val conversationSharedId: DoubleRatchetUUID,
     val oneSafePrivateKey: ByteArray?,
     val oneSafePublicKey: ByteArray?,
 )

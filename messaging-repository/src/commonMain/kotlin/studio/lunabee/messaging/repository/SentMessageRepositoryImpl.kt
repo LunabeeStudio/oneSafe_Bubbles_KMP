@@ -20,7 +20,7 @@
 package studio.lunabee.messaging.repository
 
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.messaging.domain.model.MessageId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.model.SentMessage
 import studio.lunabee.messaging.domain.repository.SentMessageRepository
 import studio.lunabee.messaging.repository.datasource.SentMessageLocalDatasource
@@ -32,11 +32,11 @@ class SentMessageRepositoryImpl @Inject constructor(
         datasource.saveSentMessage(sentMessage)
     }
 
-    override suspend fun deleteSentMessage(id: MessageId) {
+    override suspend fun deleteSentMessage(id: DoubleRatchetUUID) {
         datasource.deleteSentMessage(id)
     }
 
-    override suspend fun getSentMessage(id: MessageId): SentMessage? {
+    override suspend fun getSentMessage(id: DoubleRatchetUUID): SentMessage? {
         return datasource.getSentMessage(id)
     }
 

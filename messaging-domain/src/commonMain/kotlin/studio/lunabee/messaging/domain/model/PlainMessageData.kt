@@ -21,9 +21,10 @@ package studio.lunabee.messaging.domain.model
 
 import com.lunabee.lbcore.model.LBResult
 import kotlinx.datetime.Instant
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 sealed class PlainMessageData(
-    val id: MessageId,
+    val id: DoubleRatchetUUID,
     val sentAt: LBResult<Instant>,
     val direction: MessageDirection,
     val channel: LBResult<String>?,
@@ -33,7 +34,7 @@ sealed class PlainMessageData(
         get() = listOf(sentAt, channel).any { it is LBResult.Failure }
 
     class Default(
-        id: MessageId,
+        id: DoubleRatchetUUID,
         sentAt: LBResult<Instant>,
         val content: LBResult<String>,
         direction: MessageDirection,
@@ -51,7 +52,7 @@ sealed class PlainMessageData(
     }
 
     class AcceptedInvitation(
-        id: MessageId,
+        id: DoubleRatchetUUID,
         sentAt: LBResult<Instant>,
         channel: LBResult<String>?,
         isRead: Boolean,

@@ -19,25 +19,25 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.domain.model.contact.ContactId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 sealed interface DecryptIncomingMessageData {
     val osPlainMessage: SharedMessage?
-    val contactId: ContactId
+    val contactId: DoubleRatchetUUID
 
     data class NewMessage(
-        override val contactId: ContactId,
+        override val contactId: DoubleRatchetUUID,
         override val osPlainMessage: SharedMessage?,
     ) : DecryptIncomingMessageData
 
     data class DecryptOwnMessage(
-        override val contactId: ContactId,
+        override val contactId: DoubleRatchetUUID,
     ) : DecryptIncomingMessageData {
         override val osPlainMessage: SharedMessage? = null
     }
 
     data class AlreadyDecryptedMessage(
-        override val contactId: ContactId,
+        override val contactId: DoubleRatchetUUID,
     ) : DecryptIncomingMessageData {
         override val osPlainMessage: SharedMessage? = null
     }

@@ -16,9 +16,9 @@
 
 package studio.lunabee.messaging.domain.repository
 
-import studio.lunabee.bubbles.domain.model.SafeId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import kotlin.time.Duration
 
 interface MessagingSettingsRepository {
-    suspend fun bubblesResendMessageDelayFlow(safeId: SafeId): Duration
+    suspend fun bubblesResendMessageDelayFlow(safeId: DoubleRatchetUUID): Duration
 }

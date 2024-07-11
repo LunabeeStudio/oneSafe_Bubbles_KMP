@@ -23,12 +23,11 @@ import com.lunabee.lbcore.model.LBResult
 import kotlinx.datetime.Instant
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.EncryptEntry
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.createRandomUUID
-import studio.lunabee.messaging.domain.model.MessageId
 import studio.lunabee.messaging.domain.model.SentMessage
 import studio.lunabee.messaging.domain.model.SharedMessage
 import studio.lunabee.messaging.domain.repository.SentMessageRepository
@@ -54,11 +53,11 @@ class SaveSentMessageUseCase @Inject constructor(
     suspend operator fun invoke(
         plainMessage: SharedMessage,
         messageString: ByteArray,
-        contactId: ContactId,
+        contactId: DoubleRatchetUUID,
         createdAt: Instant,
         channel: String?,
     ): LBResult<SentMessage?> {
-        val messageId = MessageId(createRandomUUID())
+        val messageId = createRandomUUID()
         val orderRes = saveMessageUseCase(
             plainMessage = plainMessage,
             contactId = contactId,

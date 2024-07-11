@@ -18,7 +18,7 @@ package studio.lunabee.bubbles.di
 
 import org.koin.core.context.startKoin
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
-import studio.lunabee.bubbles.domain.repository.SafeRepository
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
@@ -35,7 +35,7 @@ fun initKoin(
     contactKeyLocalDataSource: ContactKeyLocalDataSource,
     contactLocalDataSource: ContactLocalDataSource,
     bubblesCryptoRepository: BubblesCryptoRepository,
-    safeRepository: SafeRepository,
+    bubblesSafeRepository: BubblesSafeRepository,
 ) {
     startKoin {
         modules(
@@ -47,7 +47,7 @@ fun initKoin(
                 contactKeyLocalDataSource = contactKeyLocalDataSource,
                 contactLocalDataSource = contactLocalDataSource,
                 bubblesCryptoRepository = bubblesCryptoRepository,
-                safeRepository = safeRepository,
+                bubblesSafeRepository = bubblesSafeRepository,
             ),
         )
     }

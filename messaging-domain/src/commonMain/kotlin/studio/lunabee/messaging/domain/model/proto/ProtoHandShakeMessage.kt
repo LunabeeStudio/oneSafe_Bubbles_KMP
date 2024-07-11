@@ -17,7 +17,6 @@
 package studio.lunabee.messaging.domain.model.proto
 
 import kotlinx.serialization.Serializable
-import studio.lunabee.bubbles.domain.model.proto.ProtoMessageHeader
 
 @Serializable
 data class ProtoHandShakeMessage(

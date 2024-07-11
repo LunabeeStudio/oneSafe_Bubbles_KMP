@@ -19,14 +19,14 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.domain.model.contact.ContactId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 /**
  * Whole message already sent to be use in case of re-sending a message
  */
 class SentMessage(
-    val id: MessageId,
-    val contactId: ContactId,
+    val id: DoubleRatchetUUID,
+    val contactId: DoubleRatchetUUID,
     val encContent: ByteArray,
     val encCreatedAt: ByteArray,
     val order: Float,

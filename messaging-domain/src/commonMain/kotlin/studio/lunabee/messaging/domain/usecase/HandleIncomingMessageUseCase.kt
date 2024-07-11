@@ -21,9 +21,8 @@ package studio.lunabee.messaging.domain.usecase
 
 import com.lunabee.lbcore.model.LBResult
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.bubbles.domain.model.contact.ContactId
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.createRandomUUID
-import studio.lunabee.messaging.domain.model.MessageId
 
 // TODO fix double call
 @Suppress("NestedBlockDepth")
@@ -43,7 +42,7 @@ class HandleIncomingMessageUseCase @Inject constructor(
                             plainMessage = plainMessage,
                             contactId = contactId,
                             channel = channel,
-                            id = MessageId(createRandomUUID()),
+                            id = createRandomUUID(),
                         )
                         when (saveResult) {
                             is LBResult.Failure -> LBResult.Failure(saveResult.throwable)
@@ -64,5 +63,5 @@ class HandleIncomingMessageUseCase @Inject constructor(
 
 sealed interface IncomingMessageState {
     data object Enqueued : IncomingMessageState
-    class Processed(val contactId: ContactId) : IncomingMessageState
+    class Processed(val contactId: DoubleRatchetUUID) : IncomingMessageState
 }

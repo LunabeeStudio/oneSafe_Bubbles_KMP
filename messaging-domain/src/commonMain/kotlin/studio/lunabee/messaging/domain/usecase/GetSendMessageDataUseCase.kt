@@ -22,18 +22,18 @@ package studio.lunabee.messaging.domain.usecase
 import com.lunabee.lbcore.model.LBResult
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.messaging.domain.extension.asOSError
-import studio.lunabee.bubbles.domain.model.contact.ContactId
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.doubleratchet.DoubleRatchetEngine
 import studio.lunabee.doubleratchet.model.DoubleRatchetError
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.SendMessageData
 
 class GetSendMessageDataUseCase @Inject constructor(
     private val doubleRatchetEngine: DoubleRatchetEngine,
 ) {
-    suspend operator fun invoke(contactId: ContactId): LBResult<SendMessageData> = BubblesError.runCatching {
+    suspend operator fun invoke(contactId: DoubleRatchetUUID): LBResult<SendMessageData> = BubblesError.runCatching {
         try {
-            doubleRatchetEngine.getSendData(contactId.value)
+            doubleRatchetEngine.getSendData(contactId)
         } catch (e: DoubleRatchetError) {
             throw e.asOSError()
         }
