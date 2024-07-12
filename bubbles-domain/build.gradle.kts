@@ -34,6 +34,7 @@ kotlin {
             implementation(project.dependencies.platform(libs.lunabee.bom))
             implementation(libs.lbcore)
             implementation(libs.lblogger)
+            implementation(libs.doubleratchet)
 
             implementation(project(":oneSafe_Bubbles_KMP:error"))
         }
