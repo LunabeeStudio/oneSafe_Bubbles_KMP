@@ -35,10 +35,10 @@ import studio.lunabee.messaging.repository.HandShakeDataRepositoryImpl
 import studio.lunabee.messaging.repository.MessageChannelRepositoryImpl
 import studio.lunabee.messaging.repository.MessageOrderRepositoryImpl
 import studio.lunabee.messaging.repository.MessageRepositoryImpl
+import studio.lunabee.messaging.repository.MessagingCryptoRepositoryImpl
 import studio.lunabee.messaging.repository.SentMessageRepositoryImpl
 
 fun messagingRepositoryModule(
-    messagingCryptoRepository: MessagingCryptoRepository,
     messagingSettingsRepository: MessagingSettingsRepository,
 ): Module = module {
     single<ConversationRepository> { ConversationRepositoryImpl(get()) }
@@ -47,9 +47,9 @@ fun messagingRepositoryModule(
     single<MessageChannelRepository> { MessageChannelRepositoryImpl() }
     single<MessageOrderRepository> { MessageOrderRepositoryImpl(get()) }
     single<MessageRepository> { MessageRepositoryImpl(get()) }
-    single<MessagingCryptoRepository> { messagingCryptoRepository }
     single<MessagingSettingsRepository> { messagingSettingsRepository }
     single<SentMessageRepository> { SentMessageRepositoryImpl(get()) }
+    single<MessagingCryptoRepository> { MessagingCryptoRepositoryImpl(get(), get(), get(), get()) }
 }
 
 class MessagingRepositories : KoinComponent {

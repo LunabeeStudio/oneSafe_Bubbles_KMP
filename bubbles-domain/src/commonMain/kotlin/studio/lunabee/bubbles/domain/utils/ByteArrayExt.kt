@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Lunabee Studio
+ * Copyright (c) 2024 Lunabee Studio
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,27 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Created by Lunabee Studio / Date - 7/12/2024 - for the oneSafe6 SDK.
+ * Last modified 12/07/2024 09:23
  */
 
-plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+package studio.lunabee.bubbles.domain.utils
+
+import kotlin.random.Random
+
+fun ByteArray.randomize(): ByteArray {
+    Random.nextBytes(this)
+    return this
 }
 
-group = "studio.lunabee.bubbles"
-description = "Repository"
-
-kotlin {
-    jvm()
-    iosSimulatorArm64()
-    iosArm64()
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.doubleratchet)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
-            implementation(project(":oneSafe_Bubbles_KMP:error"))
-        }
+inline fun <T> ByteArray.use(block: (ByteArray) -> T): T {
+    return try {
+        block(this)
+    } finally {
+        this.randomize()
     }
 }

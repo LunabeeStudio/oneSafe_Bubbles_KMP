@@ -20,8 +20,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
+import studio.lunabee.bubbles.repository.BubblesCryptoRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactKeyRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactRepositoryImpl
 
@@ -34,6 +36,6 @@ internal interface BubblesRepositoryModule {
     @Binds
     fun bindsContactRepository(contactRepositoryImpl: ContactRepositoryImpl): ContactRepository
 
-    // single<BubblesCryptoRepository> { bubblesCryptoRepository }
-    // single<SafeRepository> { safeRepository }
+    @Binds
+    fun bindsBubblesCryptoRepository(bubblesCryptoRepositoryImpl: BubblesCryptoRepositoryImpl): BubblesCryptoRepository
 }

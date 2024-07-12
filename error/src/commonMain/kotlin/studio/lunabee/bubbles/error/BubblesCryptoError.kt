@@ -33,6 +33,8 @@ data class BubblesCryptoError(
         BUBBLES_MASTER_KEY_ENCRYPTION_FAIL("Fail to encrypt the bubbles master key"),
         BUBBLES_CONTACT_KEY_ENCRYPTION_FAIL("Fail to encrypt a bubbles contact key"),
         BUBBLES_CONTACT_KEY_DECRYPTION_FAIL("Fail to decrypt a bubbles contact key"),
+        ENCRYPTION_FAILED_BAD_KEY("Unable to encrypt with the provided key"),
+        DECRYPTION_FAILED_BAD_KEY("Unable to decrypt with the provided key"),
         BUBBLES_MASTER_KEY_NOT_LOADED("Bubbles contact key not loaded in memory"),
         MISSING_MAPPER("No ByteArray mapper found"),
         ILLEGAL_VALUE("Unexpected value"),

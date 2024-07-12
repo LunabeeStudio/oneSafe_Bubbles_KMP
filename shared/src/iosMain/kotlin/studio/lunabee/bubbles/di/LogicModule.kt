@@ -17,12 +17,15 @@
 package studio.lunabee.bubbles.di
 
 import kotlinx.datetime.Clock
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
+import studio.lunabee.bubbles.domain.BubblesCryptoDataMapper
+import studio.lunabee.bubbles.domain.crypto.BubblesCryptoEngine
+import studio.lunabee.bubbles.domain.crypto.BubblesDataHashEngine
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
+import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
-import studio.lunabee.messaging.domain.repository.MessagingCryptoRepository
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
@@ -37,13 +40,13 @@ fun logicModule(
     sentMessageLocalDatasource: SentMessageLocalDatasource,
     contactKeyLocalDataSource: ContactKeyLocalDataSource,
     contactLocalDataSource: ContactLocalDataSource,
-    bubblesCryptoRepository: BubblesCryptoRepository,
     bubblesSafeRepository: BubblesSafeRepository,
-    messagingCryptoRepository: MessagingCryptoRepository,
     messagingSettingsRepository: MessagingSettingsRepository,
+    bubblesCryptoEngine: BubblesCryptoEngine,
+    bubblesMainCryptoRepository: BubblesMainCryptoRepository,
+    bubblesDataHashEngine: BubblesDataHashEngine,
 ) = listOf(
     bubblesRepositoryModule(
-        bubblesCryptoRepository = bubblesCryptoRepository,
         bubblesSafeRepository = bubblesSafeRepository,
     ),
     bubblesDatasourceModule(
@@ -57,10 +60,15 @@ fun logicModule(
         enqueuedMessageLocalDataSource = enqueuedMessageLocalDataSource,
     ),
     messagingRepositoryModule(
-        messagingCryptoRepository = messagingCryptoRepository,
         messagingSettingsRepository = messagingSettingsRepository,
     ),
     bubblesUseCaseModule,
     messagingUseCaseModule,
-    module { single<Clock> { Clock.System } },
+    module {
+        single<Clock> { Clock.System }
+        singleOf(::BubblesCryptoDataMapper)
+        single<BubblesCryptoEngine> { bubblesCryptoEngine }
+        single<BubblesMainCryptoRepository> { bubblesMainCryptoRepository }
+        single<BubblesDataHashEngine> { bubblesDataHashEngine }
+    },
 )

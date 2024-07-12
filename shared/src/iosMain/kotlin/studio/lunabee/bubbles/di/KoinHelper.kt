@@ -17,11 +17,11 @@
 package studio.lunabee.bubbles.di
 
 import org.koin.core.context.startKoin
+import studio.lunabee.bubbles.domain.crypto.BubblesCryptoEngine
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
-import studio.lunabee.messaging.domain.repository.MessagingCryptoRepository
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
@@ -38,8 +38,8 @@ fun initKoin(
     contactLocalDataSource: ContactLocalDataSource,
     bubblesCryptoRepository: BubblesCryptoRepository,
     bubblesSafeRepository: BubblesSafeRepository,
-    messagingCryptoRepository: MessagingCryptoRepository,
     messagingSettingsRepository: MessagingSettingsRepository,
+    bubblesCryptoEngine: BubblesCryptoEngine,
 ) {
     startKoin {
         modules(
@@ -52,8 +52,8 @@ fun initKoin(
                 contactLocalDataSource = contactLocalDataSource,
                 bubblesCryptoRepository = bubblesCryptoRepository,
                 bubblesSafeRepository = bubblesSafeRepository,
-                messagingCryptoRepository = messagingCryptoRepository,
                 messagingSettingsRepository = messagingSettingsRepository,
+                bubblesCryptoEngine = bubblesCryptoEngine,
             ),
         )
     }

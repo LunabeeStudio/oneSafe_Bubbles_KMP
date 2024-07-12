@@ -23,15 +23,15 @@ import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.domain.repository.ContactRepository
+import studio.lunabee.bubbles.repository.BubblesCryptoRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactKeyRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactRepositoryImpl
 
 fun bubblesRepositoryModule(
-    bubblesCryptoRepository: BubblesCryptoRepository,
     bubblesSafeRepository: BubblesSafeRepository,
 ) = module {
     single<ContactKeyRepository> { ContactKeyRepositoryImpl(get()) }
-    single<BubblesCryptoRepository> { bubblesCryptoRepository }
+    single<BubblesCryptoRepository> { BubblesCryptoRepositoryImpl(get(), get(), get(), get(), get()) }
     single<ContactRepository> { ContactRepositoryImpl(get()) }
     single<BubblesSafeRepository> { bubblesSafeRepository }
 }

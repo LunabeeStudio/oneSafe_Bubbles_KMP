@@ -30,11 +30,16 @@ sealed interface MessageSharingMode {
         override val id: String = CypherTextId
     }
 
+    data object Archive : MessageSharingMode {
+        override val id: String = ArchiveId
+    }
+
     companion object {
         fun fromString(raw: String): MessageSharingMode {
             return when (raw) {
                 DeeplinkId -> Deeplink
                 CypherTextId -> CypherText
+                ArchiveId -> Archive
                 else -> {
                     CypherText
                 }
@@ -45,3 +50,4 @@ sealed interface MessageSharingMode {
 
 private const val DeeplinkId: String = "deeplink"
 private const val CypherTextId: String = "cypherText"
+private const val ArchiveId: String = "archive"
