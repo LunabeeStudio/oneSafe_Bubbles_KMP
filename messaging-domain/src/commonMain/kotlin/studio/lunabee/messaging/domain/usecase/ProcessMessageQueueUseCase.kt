@@ -28,6 +28,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.yield
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.DecryptEntry
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.error.BubblesCryptoError
 import studio.lunabee.doubleratchet.model.createRandomUUID
 import studio.lunabee.messaging.domain.model.EnqueuedMessage
@@ -42,19 +43,24 @@ class ProcessMessageQueueUseCase @Inject constructor(
     private val decryptIncomingMessageUseCase: DecryptIncomingMessageUseCase,
     private val saveMessageUseCase: SaveMessageUseCase,
     private val cryptoRepository: MessagingCryptoRepository,
+    private val bubblesSafeRepository: BubblesSafeRepository,
 ) {
     /**
      * Wait until crypto is ready and dequeue all messages to process them. Skip the flush the observer is running.
      */
     suspend fun flush() {
-        if (mutex.tryLock()) {
-            try {
-                enqueuedMessageRepository.getAll().forEach { enqueuedMessage ->
-                    processMessage(enqueuedMessage)
-                    yield()
+        bubblesSafeRepository.isSafeReady().collectLatest { cryptoReady ->
+            if (cryptoReady) {
+                if (mutex.tryLock()) {
+                    try {
+                        enqueuedMessageRepository.getAll().forEach { enqueuedMessage ->
+                            processMessage(enqueuedMessage)
+                            yield()
+                        }
+                    } finally {
+                        mutex.unlock()
+                    }
                 }
-            } finally {
-                mutex.unlock()
             }
         }
     }
