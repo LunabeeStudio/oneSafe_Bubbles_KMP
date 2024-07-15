@@ -20,7 +20,7 @@ object ProjectConfig {
     const val LIBRARY_URL: String = "https://github.com/LunabeeStudio/oneSafe_Bubbles_KMP"
     const val GROUP_ID: String = "studio.lunabee.bubbles"
     const val COMPILE_SDK: Int = 34
-    const val MIN_SDK: Int = 23
+    const val MIN_SDK: Int = 21
 
     val JDK_VERSION: JavaVersion = JavaVersion.VERSION_17
 }
