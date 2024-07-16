@@ -18,10 +18,13 @@ package studio.lunabee.bubbles.di
 
 import org.koin.core.context.startKoin
 import studio.lunabee.bubbles.domain.crypto.BubblesCryptoEngine
-import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
+import studio.lunabee.bubbles.domain.crypto.BubblesDataHashEngine
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
+import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
+import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
+import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
@@ -36,10 +39,13 @@ fun initKoin(
     sentMessageLocalDatasource: SentMessageLocalDatasource,
     contactKeyLocalDataSource: ContactKeyLocalDataSource,
     contactLocalDataSource: ContactLocalDataSource,
-    bubblesCryptoRepository: BubblesCryptoRepository,
     bubblesSafeRepository: BubblesSafeRepository,
     messagingSettingsRepository: MessagingSettingsRepository,
     bubblesCryptoEngine: BubblesCryptoEngine,
+    bubblesMainCryptoRepository: BubblesMainCryptoRepository,
+    bubblesDataHashEngine: BubblesDataHashEngine,
+    doubleRatchetKeyRepository: DoubleRatchetKeyRepository,
+    doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
 ) {
     startKoin {
         modules(
@@ -50,10 +56,13 @@ fun initKoin(
                 sentMessageLocalDatasource = sentMessageLocalDatasource,
                 contactKeyLocalDataSource = contactKeyLocalDataSource,
                 contactLocalDataSource = contactLocalDataSource,
-                bubblesCryptoRepository = bubblesCryptoRepository,
                 bubblesSafeRepository = bubblesSafeRepository,
                 messagingSettingsRepository = messagingSettingsRepository,
                 bubblesCryptoEngine = bubblesCryptoEngine,
+                bubblesMainCryptoRepository = bubblesMainCryptoRepository,
+                bubblesDataHashEngine = bubblesDataHashEngine,
+                doubleRatchetKeyRepository = doubleRatchetKeyRepository,
+                doubleRatchetLocalDatasource = doubleRatchetLocalDatasource,
             ),
         )
     }

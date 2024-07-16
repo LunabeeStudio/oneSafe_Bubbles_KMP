@@ -26,6 +26,8 @@ import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
+import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
+import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
@@ -45,6 +47,8 @@ fun logicModule(
     bubblesCryptoEngine: BubblesCryptoEngine,
     bubblesMainCryptoRepository: BubblesMainCryptoRepository,
     bubblesDataHashEngine: BubblesDataHashEngine,
+    doubleRatchetKeyRepository: DoubleRatchetKeyRepository,
+    doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
 ) = listOf(
     bubblesRepositoryModule(
         bubblesSafeRepository = bubblesSafeRepository,
@@ -64,6 +68,10 @@ fun logicModule(
     ),
     bubblesUseCaseModule,
     messagingUseCaseModule,
+    doubleRatchetModule(
+        doubleRatchetKeyRepository,
+        doubleRatchetLocalDatasource,
+    ),
     module {
         single<Clock> { Clock.System }
         singleOf(::BubblesCryptoDataMapper)
