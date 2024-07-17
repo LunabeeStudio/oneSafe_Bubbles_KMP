@@ -51,6 +51,9 @@ koin = "3.5.3"
 
 paging = "3.3.0"
 
+mockk = "1.13.11"
+
+
 [libraries]
 
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
@@ -70,3 +73,5 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
 dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger-hilt" }
 androidx-paging-common = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "paging" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }

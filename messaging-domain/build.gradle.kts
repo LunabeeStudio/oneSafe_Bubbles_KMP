@@ -43,5 +43,11 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.androidx.paging.common)
         }
+
+        jvmTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutine.test)
+            implementation(libs.mockk)
+        }
     }
 }
