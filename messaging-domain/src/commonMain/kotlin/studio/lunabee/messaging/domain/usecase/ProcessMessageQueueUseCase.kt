@@ -69,13 +69,17 @@ class ProcessMessageQueueUseCase @Inject constructor(
      * Wait until crypto is ready, observe and dequeue all messages to process them
      */
     suspend fun observe() {
-        mutex.withLock {
-            enqueuedMessageRepository
-                .getOldestAsFlow()
-                .filterNotNull()
-                .collectLatest { enqueuedMessage ->
-                    processMessage(enqueuedMessage)
+        bubblesSafeRepository.isSafeReady().collectLatest { cryptoReady ->
+            if (cryptoReady) {
+                mutex.withLock {
+                    enqueuedMessageRepository
+                        .getOldestAsFlow()
+                        .filterNotNull()
+                        .collectLatest { enqueuedMessage ->
+                            processMessage(enqueuedMessage)
+                        }
                 }
+            }
         }
     }
 
