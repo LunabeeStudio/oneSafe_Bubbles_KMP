@@ -54,6 +54,7 @@ kotlin {
             export(project(":oneSafe_Bubbles_KMP:messaging-domain"))
             export(project(":oneSafe_Bubbles_KMP:messaging-repository"))
             export(project(":oneSafe_Bubbles_KMP:error"))
+            isStatic = true
         }
     }
     sourceSets {
@@ -65,11 +66,11 @@ kotlin {
             implementation(libs.lbcore)
             implementation(libs.lblogger)
 
-            implementation(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
-            implementation(project(":oneSafe_Bubbles_KMP:bubbles-repository"))
-            implementation(project(":oneSafe_Bubbles_KMP:messaging-domain"))
-            implementation(project(":oneSafe_Bubbles_KMP:messaging-repository"))
-            implementation(project(":oneSafe_Bubbles_KMP:error"))
+            api(project(":oneSafe_Bubbles_KMP:bubbles-domain"))
+            api(project(":oneSafe_Bubbles_KMP:bubbles-repository"))
+            api(project(":oneSafe_Bubbles_KMP:messaging-domain"))
+            api(project(":oneSafe_Bubbles_KMP:messaging-repository"))
+            api(project(":oneSafe_Bubbles_KMP:error"))
         }
         iosMain.dependencies { implementation(libs.koin.core) }
 
