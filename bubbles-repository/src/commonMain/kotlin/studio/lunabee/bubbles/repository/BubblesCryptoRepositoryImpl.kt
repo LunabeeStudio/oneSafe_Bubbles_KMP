@@ -127,8 +127,8 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
 
     override suspend fun deriveUUIDToKey(uuid: DoubleRatchetUUID, keyLength: Int): ByteArray {
         return hkdfHashEngine.deriveKey(
-            uuid.uuidString().encodeToByteArray(),
-            uuid.uuidString().encodeToByteArray(),
+            uuid.toByteArray(),
+            uuid.toByteArray(),
             ByteArray(keyLength),
         )
     }

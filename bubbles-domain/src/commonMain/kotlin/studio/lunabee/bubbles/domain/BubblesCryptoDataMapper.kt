@@ -26,6 +26,7 @@ import studio.lunabee.bubbles.domain.utils.toLong
 import studio.lunabee.bubbles.domain.utils.toMessageSharingMode
 import studio.lunabee.bubbles.error.BubblesCryptoError
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
+import studio.lunabee.doubleratchet.model.toDoubleRatchetUUID
 import kotlin.reflect.KClass
 
 class BubblesCryptoDataMapper @Inject constructor() {
@@ -37,7 +38,7 @@ class BubblesCryptoDataMapper @Inject constructor() {
         data is Instant -> data.toEpochMilliseconds().toByteArray()
         data is Boolean -> data.toByteArray()
         data is MessageSharingMode -> data.id.encodeToByteArray()
-        data is DoubleRatchetUUID -> data.uuidString().encodeToByteArray()
+        data is DoubleRatchetUUID -> data.toByteArray()
         else -> throw BubblesCryptoError(
             BubblesCryptoError.Code.MISSING_MAPPER,
             "No mapper found or provided for type ${data::class.simpleName}",
@@ -58,7 +59,7 @@ class BubblesCryptoDataMapper @Inject constructor() {
             clazz == Instant::class -> Instant.fromEpochMilliseconds(rawData.toLong()) as Data
             clazz == Boolean::class -> rawData.toBoolean() as Data
             clazz == MessageSharingMode::class -> rawData.toMessageSharingMode() as Data
-            clazz == DoubleRatchetUUID::class -> DoubleRatchetUUID(rawData.decodeToString()) as Data
+            clazz == DoubleRatchetUUID::class -> rawData.toDoubleRatchetUUID() as Data
             else -> throw BubblesCryptoError(
                 BubblesCryptoError.Code.MISSING_MAPPER,
                 "No mapper found for type ${clazz.simpleName}",
