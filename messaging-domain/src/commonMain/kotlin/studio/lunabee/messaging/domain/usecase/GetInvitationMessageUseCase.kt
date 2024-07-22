@@ -43,7 +43,6 @@ class GetInvitationMessageUseCase @Inject constructor(
             ?: throw BubblesMessagingError(BubblesMessagingError.Code.HANDSHAKE_DATA_NOT_FOUND)
         val conversation = doubleRatchetLocalDatasource.getConversation(contactId)
             ?: throw BubblesDomainError(BubblesDomainError.Code.NO_MATCHING_CONTACT)
-        println("message -> recipient -> ${handShakeData.conversationLocalId.uuidString()}")
         val invitationProto = ProtoInvitationMessage(
             doubleRatchetPublicKey = conversation.personalKeyPair.publicKey.value,
             oneSafePublicKey = handShakeData.oneSafePublicKey ?: byteArrayOf(),

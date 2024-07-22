@@ -59,15 +59,13 @@ class AcceptInvitationUseCase @Inject constructor(
         } catch (e: IllegalArgumentException) {
             throw BubblesDomainError(BubblesDomainError.Code.NOT_AN_INVITATION_MESSAGE)
         }
-        println("message -> $invitationMessageProto")
         val contactId = createRandomUUID()
         val keyPair = doubleRatchetKeyRepository.generateKeyPair()
         val sharedSecretKey = doubleRatchetKeyRepository.createDiffieHellmanSharedSecret(
             DRPublicKey(invitationMessageProto.oneSafePublicKey),
             keyPair.privateKey,
         )
-        println("message -> $sharedSecretKey")
-        val contact = createContactUseCase(
+        createContactUseCase(
             PlainContact(
                 id = contactId,
                 name = contactName,
@@ -76,12 +74,10 @@ class AcceptInvitationUseCase @Inject constructor(
                 sharingMode = sharingMode,
             ),
         )
-        println("message -> $contact")
         val sharedSalt = bubblesCryptoRepository.deriveUUIDToKey(
             DoubleRatchetUUID(invitationMessageProto.conversationId),
             doubleRatchetKeyRepository.rootKeyByteSize,
         )
-        println("message -> $sharedSalt")
         doubleRatchetEngine.createNewConversationFromInvitation(
             sharedSalt = DRSharedSecret(sharedSalt),
             contactPublicKey = DRPublicKey(invitationMessageProto.doubleRatchetPublicKey),
@@ -94,7 +90,6 @@ class AcceptInvitationUseCase @Inject constructor(
             oneSafePrivateKey = null,
             conversationSharedId = DoubleRatchetUUID(invitationMessageProto.conversationId),
         )
-        println("message -> $handShakeData")
         insertHandShakeDataUseCase(handShakeData)
         return contactId
     }

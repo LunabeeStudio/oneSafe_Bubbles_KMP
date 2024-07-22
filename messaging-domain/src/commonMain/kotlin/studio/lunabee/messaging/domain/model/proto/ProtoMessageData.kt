@@ -17,9 +17,12 @@
 package studio.lunabee.messaging.domain.model.proto
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.protobuf.ProtoNumber
 
 @Serializable
 data class ProtoMessageData(
+    @ProtoNumber(1)
     val content: String,
+    @ProtoNumber(3)
     val sentAt: ProtoTimestamp,
 )

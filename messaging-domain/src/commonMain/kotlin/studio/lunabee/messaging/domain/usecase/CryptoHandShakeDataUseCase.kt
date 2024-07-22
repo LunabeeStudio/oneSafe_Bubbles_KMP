@@ -65,7 +65,6 @@ class CryptoHandShakeDataUseCase @Inject constructor(
             oneSafePrivateKey = plainEntries[1] as ByteArray?,
             oneSafePublicKey = plainEntries[2] as ByteArray?,
         )
-        println("message -> $data")
         return data
     }
 }

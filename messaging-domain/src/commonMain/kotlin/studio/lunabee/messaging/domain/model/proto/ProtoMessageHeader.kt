@@ -16,11 +16,19 @@
 
 package studio.lunabee.messaging.domain.model.proto
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.cbor.ByteString
+import kotlinx.serialization.protobuf.ProtoNumber
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 data class ProtoMessageHeader(
+    @ProtoNumber(1)
     val messageNumber: Int,
+    @ProtoNumber(2)
     val sequenceMessageNumber: Int,
+    @ProtoNumber(3)
+    @ByteString
     val publicKey: ByteArray,
 )

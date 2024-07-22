@@ -17,10 +17,16 @@
 package studio.lunabee.messaging.domain.model.proto
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.cbor.ByteString
+import kotlinx.serialization.protobuf.ProtoNumber
 
 @Serializable
 data class ProtoMessage(
+    @ProtoNumber(1)
+    @ByteString
     val body: ByteArray,
+    @ProtoNumber(2)
     val header: ProtoMessageHeader,
+    @ProtoNumber(3)
     val recipientId: String,
 )

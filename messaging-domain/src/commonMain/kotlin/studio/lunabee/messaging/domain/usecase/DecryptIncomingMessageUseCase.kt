@@ -191,7 +191,6 @@ class DecryptIncomingMessageUseCase @Inject constructor(
     ): DecryptIncomingMessageData {
         val plainData = bubblesCryptoRepository.sharedDecrypt(messageData, localKey, sharedKey)
         val plainMessageProto = ProtoBuf.decodeFromByteArray<ProtoMessage>(plainData)
-        println("result -> protoMessage $plainMessageProto")
         val plainMessage = OSEncryptedMessage(
             body = plainMessageProto.body,
             messageHeader = MessageHeader(
@@ -235,9 +234,6 @@ class DecryptIncomingMessageUseCase @Inject constructor(
     private fun tryParseHandShakeMessage(messageData: ByteArray): ProtoHandShakeMessage? {
         return try {
             val result = ProtoBuf.decodeFromByteArray<ProtoHandShakeMessage>(messageData)
-            DoubleRatchetUUID(result.recipientId)
-            DoubleRatchetUUID(result.conversationId)
-            println("result -> $result")
             return result
         } catch (e: SerializationException) {
             null

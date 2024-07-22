@@ -33,6 +33,7 @@ kotlin {
             implementation(libs.doubleratchet)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.protobuf)
+            implementation(libs.kotlinx.serialization.cbor)
             implementation(project.dependencies.platform(libs.lunabee.bom))
             implementation(libs.lbcore)
             implementation(libs.lblogger)

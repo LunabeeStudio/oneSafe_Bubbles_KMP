@@ -16,12 +16,22 @@
 
 package studio.lunabee.messaging.domain.model.proto
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.cbor.ByteString
+import kotlinx.serialization.protobuf.ProtoNumber
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 data class ProtoInvitationMessage(
+    @ByteString
+    @ProtoNumber(1)
     val doubleRatchetPublicKey: ByteArray,
+    @ProtoNumber(2)
+    @ByteString
     val oneSafePublicKey: ByteArray,
+    @ProtoNumber(3)
     val conversationId: String,
+    @ProtoNumber(4)
     val recipientId: String,
 )

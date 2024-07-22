@@ -37,7 +37,7 @@ detekt = "1.23.1"
 
 kotlinx-datetime = "0.5.0"
 
-doubleratchet = "0.1.4-uuid-bytes-SNAPSHOT"
+doubleratchet = "0.1.4-uuid-bytes-iossupport-SNAPSHOT"
 
 kotlinx-coroutines = "1.8.1"
 
@@ -69,6 +69,7 @@ lunabee-bom = { group = "studio.lunabee", name = "lunabee-bom", version.ref = "l
 lbcore = { group = "studio.lunabee", name = "lbcore" }
 lblogger = { group = "studio.lunabee", name = "lblogger-kermit" }
 kotlinx-serialization-protobuf = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-protobuf", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-cbor = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-cbor", version.ref = "kotlinx-serialization" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
 dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger-hilt" }
