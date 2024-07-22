@@ -38,6 +38,7 @@ import studio.lunabee.messaging.domain.model.proto.ProtoHandShakeMessage
 import studio.lunabee.messaging.domain.model.proto.ProtoMessage
 import studio.lunabee.messaging.domain.model.proto.ProtoMessageData
 import studio.lunabee.messaging.domain.model.proto.ProtoMessageHeader
+import studio.lunabee.messaging.domain.model.proto.ProtoTimestamp
 import studio.lunabee.messaging.domain.repository.MessagingCryptoRepository
 
 /**
@@ -57,9 +58,9 @@ class EncryptMessageUseCase @Inject constructor(
         sentAt: Instant,
         sendMessageData: SendMessageData,
     ): LBResult<ByteArray> = BubblesError.runCatching {
-        val messageBody: ProtoMessageData = ProtoMessageData(
+        val messageBody = ProtoMessageData(
             content = plainMessage,
-            sentAt = sentAt.toEpochMilliseconds(),
+            sentAt = ProtoTimestamp.fromInstant(sentAt),
         )
         val byteArrayMessage = ProtoBuf.encodeToByteArray(messageBody)
         // Encrypt the message body with the message Key

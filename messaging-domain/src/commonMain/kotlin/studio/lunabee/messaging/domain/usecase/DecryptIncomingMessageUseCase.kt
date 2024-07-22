@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Instant
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromByteArray
@@ -176,7 +175,7 @@ class DecryptIncomingMessageUseCase @Inject constructor(
         } else {
             SharedMessage(
                 content = plainMessageDataProto.content,
-                sentAt = Instant.fromEpochMilliseconds(plainMessageDataProto.sentAt),
+                sentAt = plainMessageDataProto.sentAt.toInstant(),
                 recipientId = plainMessage.recipientId,
             )
         }
@@ -192,6 +191,7 @@ class DecryptIncomingMessageUseCase @Inject constructor(
     ): DecryptIncomingMessageData {
         val plainData = bubblesCryptoRepository.sharedDecrypt(messageData, localKey, sharedKey)
         val plainMessageProto = ProtoBuf.decodeFromByteArray<ProtoMessage>(plainData)
+        println("result -> protoMessage $plainMessageProto")
         val plainMessage = OSEncryptedMessage(
             body = plainMessageProto.body,
             messageHeader = MessageHeader(
@@ -224,7 +224,7 @@ class DecryptIncomingMessageUseCase @Inject constructor(
                     SharedMessage(
                         content = plainMessageDataProto.content,
                         recipientId = plainMessage.recipientId,
-                        sentAt = Instant.fromEpochMilliseconds(plainMessageDataProto.sentAt),
+                        sentAt = plainMessageDataProto.sentAt.toInstant(),
                     ),
                 )
             }
@@ -234,7 +234,9 @@ class DecryptIncomingMessageUseCase @Inject constructor(
     @OptIn(ExperimentalSerializationApi::class)
     private fun tryParseHandShakeMessage(messageData: ByteArray): ProtoHandShakeMessage? {
         return try {
-            ProtoBuf.decodeFromByteArray<ProtoHandShakeMessage>(messageData)
+            val result = ProtoBuf.decodeFromByteArray<ProtoHandShakeMessage>(messageData)
+            println("result -> $result")
+            return result
         } catch (e: SerializationException) {
             null
         } catch (e: IllegalArgumentException) {

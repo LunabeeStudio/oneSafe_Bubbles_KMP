@@ -12,14 +12,34 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Created by Lunabee Studio / Date - 7/22/2024 - for the oneSafe6 SDK.
+ * Last modified 22/07/2024 09:31
  */
 
 package studio.lunabee.messaging.domain.model.proto
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProtoMessageData(
-    val content: String,
-    val sentAt: ProtoTimestamp,
-)
+data class ProtoTimestamp(
+    val seconds: Long = 0,
+    val nanos: Int = 0
+) {
+
+    fun toInstant(): Instant {
+        return Instant.fromEpochSeconds(seconds, nanos)
+    }
+
+    companion object {
+        fun fromInstant(instant: Instant): ProtoTimestamp {
+            return ProtoTimestamp(
+                seconds = instant.epochSeconds,
+                nanos = instant.nanosecondsOfSecond
+            )
+        }
+
+    }
+
+}
