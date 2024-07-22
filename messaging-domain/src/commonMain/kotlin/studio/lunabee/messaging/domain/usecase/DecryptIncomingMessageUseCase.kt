@@ -235,6 +235,8 @@ class DecryptIncomingMessageUseCase @Inject constructor(
     private fun tryParseHandShakeMessage(messageData: ByteArray): ProtoHandShakeMessage? {
         return try {
             val result = ProtoBuf.decodeFromByteArray<ProtoHandShakeMessage>(messageData)
+            DoubleRatchetUUID(result.recipientId)
+            DoubleRatchetUUID(result.conversationId)
             println("result -> $result")
             return result
         } catch (e: SerializationException) {

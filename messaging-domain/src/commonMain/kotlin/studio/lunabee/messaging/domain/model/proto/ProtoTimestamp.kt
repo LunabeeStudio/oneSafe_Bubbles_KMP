@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProtoTimestamp(
     val seconds: Long = 0,
-    val nanos: Int = 0
+    val nanos: Int = 0,
 ) {
 
     fun toInstant(): Instant {
@@ -36,10 +36,8 @@ data class ProtoTimestamp(
         fun fromInstant(instant: Instant): ProtoTimestamp {
             return ProtoTimestamp(
                 seconds = instant.epochSeconds,
-                nanos = instant.nanosecondsOfSecond
+                nanos = instant.nanosecondsOfSecond,
             )
         }
-
     }
-
 }
