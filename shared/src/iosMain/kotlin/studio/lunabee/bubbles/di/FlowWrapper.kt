@@ -33,3 +33,23 @@ class FlowWrapper<T : Any> {
 
     fun flow(): Flow<T> = _flow.asSharedFlow()
 }
+
+class FlowNullableWrapper<T> {
+    private val _flow = MutableSharedFlow<T>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    fun emit(value: T) {
+        _flow.tryEmit(value)
+    }
+
+    fun flow(): Flow<T> = _flow.asSharedFlow()
+}
+
+class FlowListWrapper<T : Any> {
+    private val _flow = MutableSharedFlow<List<T>>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    fun emit(value: List<T>) {
+        _flow.tryEmit(value)
+    }
+
+    fun flow(): Flow<List<T>> = _flow.asSharedFlow()
+}
