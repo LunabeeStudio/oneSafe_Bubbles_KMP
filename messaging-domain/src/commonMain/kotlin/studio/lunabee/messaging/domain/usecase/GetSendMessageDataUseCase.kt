@@ -21,7 +21,7 @@ package studio.lunabee.messaging.domain.usecase
 
 import com.lunabee.lbcore.model.LBResult
 import studio.lunabee.bubbles.domain.di.Inject
-import studio.lunabee.messaging.domain.extension.asOSError
+import studio.lunabee.messaging.domain.extension.asBubblesError
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.doubleratchet.DoubleRatchetEngine
 import studio.lunabee.doubleratchet.model.DoubleRatchetError
@@ -35,7 +35,7 @@ class GetSendMessageDataUseCase @Inject constructor(
         try {
             doubleRatchetEngine.getSendData(contactId)
         } catch (e: DoubleRatchetError) {
-            throw e.asOSError()
+            throw e.asBubblesError()
         }
     }
 }

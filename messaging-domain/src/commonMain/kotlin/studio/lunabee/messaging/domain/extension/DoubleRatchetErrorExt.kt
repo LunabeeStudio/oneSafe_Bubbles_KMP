@@ -20,12 +20,12 @@
 package studio.lunabee.messaging.domain.extension
 
 import com.lunabee.lbcore.model.LBResult
-import studio.lunabee.bubbles.error.BubbleDoubleRatchetError
+import studio.lunabee.bubbles.error.BubblesDoubleRatchetError
 import studio.lunabee.doubleratchet.model.DoubleRatchetError
 
-fun DoubleRatchetError.asOSError(): BubbleDoubleRatchetError {
-    val code: BubbleDoubleRatchetError.Code = BubbleDoubleRatchetError.Code.valueOf(type.name)
-    return BubbleDoubleRatchetError(code)
+fun DoubleRatchetError.asBubblesError(): BubblesDoubleRatchetError {
+    val code: BubblesDoubleRatchetError.Code = BubblesDoubleRatchetError.Code.valueOf(type.name)
+    return BubblesDoubleRatchetError(code)
 }
 
 fun <T> LBResult<T>.getOrThrow(defaultMessage: String? = null): T = when (this) {

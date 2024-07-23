@@ -19,7 +19,7 @@
 
 package studio.lunabee.messaging.domain.model
 
-import studio.lunabee.bubbles.error.BubbleDoubleRatchetError
+import studio.lunabee.bubbles.error.BubblesDoubleRatchetError
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
@@ -56,7 +56,7 @@ sealed interface DecryptResult {
     }
 
     enum class Error(val error: BubblesError) {
-        ALREADY_DECRYPTED(BubbleDoubleRatchetError(BubbleDoubleRatchetError.Code.MessageKeyNotFound)),
-        OWN_MESSAGE(BubbleDoubleRatchetError(BubbleDoubleRatchetError.Code.MessageKeyNotFound)),
+        ALREADY_DECRYPTED(BubblesDoubleRatchetError(BubblesDoubleRatchetError.Code.MessageKeyNotFound)),
+        OWN_MESSAGE(BubblesDoubleRatchetError(BubblesDoubleRatchetError.Code.CantDecryptSentMessage)),
     }
 }

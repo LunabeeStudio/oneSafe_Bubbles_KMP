@@ -48,7 +48,7 @@ import studio.lunabee.doubleratchet.model.DoubleRatchetError
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.MessageHeader
 import studio.lunabee.messaging.domain.MessagingConstant
-import studio.lunabee.messaging.domain.extension.asOSError
+import studio.lunabee.messaging.domain.extension.asBubblesError
 import studio.lunabee.messaging.domain.model.DecryptIncomingMessageData
 import studio.lunabee.messaging.domain.model.OSEncryptedMessage
 import studio.lunabee.messaging.domain.model.SharedMessage
@@ -162,7 +162,7 @@ class DecryptIncomingMessageUseCase @Inject constructor(
             if (e.type == DoubleRatchetError.Type.MessageKeyNotFound) {
                 return DecryptIncomingMessageData.AlreadyDecryptedMessage(contact.id)
             } else {
-                throw e.asOSError()
+                throw e.asBubblesError()
             }
         }
 
@@ -213,7 +213,7 @@ class DecryptIncomingMessageUseCase @Inject constructor(
                     if (e.type == DoubleRatchetError.Type.MessageKeyNotFound) {
                         return DecryptIncomingMessageData.AlreadyDecryptedMessage(contact.id)
                     } else {
-                        throw e.asOSError()
+                        throw e.asBubblesError()
                     }
                 }
                 val plainBody = messagingCryptoRepository.decryptMessage(plainMessage.body, messageKey)
