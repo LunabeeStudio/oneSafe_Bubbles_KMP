@@ -26,6 +26,8 @@ import studio.lunabee.bubbles.domain.repository.ContactRepository
 import studio.lunabee.bubbles.repository.BubblesCryptoRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactKeyRepositoryImpl
 import studio.lunabee.bubbles.repository.ContactRepositoryImpl
+import studio.lunabee.bubbles.repository.DoubleRatchetKeyRepositoryImpl
+import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -38,4 +40,7 @@ internal interface BubblesRepositoryModule {
 
     @Binds
     fun bindsBubblesCryptoRepository(bubblesCryptoRepositoryImpl: BubblesCryptoRepositoryImpl): BubblesCryptoRepository
+
+    @Binds
+    fun bindsDoubleRatchetKeyRepository(doubleRatchetKeyRepositoryImpl: DoubleRatchetKeyRepositoryImpl): DoubleRatchetKeyRepository
 }

@@ -21,13 +21,13 @@ package studio.lunabee.bubbles.di
 
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import studio.lunabee.bubbles.repository.DoubleRatchetKeyRepositoryImpl
 import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
 import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 
 fun doubleRatchetModule(
-    doubleRatchetKeyRepository: DoubleRatchetKeyRepository,
     doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
 ): Module = module {
     single<DoubleRatchetLocalDatasource> { doubleRatchetLocalDatasource }
-    single<DoubleRatchetKeyRepository> { doubleRatchetKeyRepository }
+    single<DoubleRatchetKeyRepository> { DoubleRatchetKeyRepositoryImpl(get(), get()) }
 }

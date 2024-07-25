@@ -123,7 +123,7 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
         return hkdfHashEngine.deriveKey(
             uuid.toByteArray(),
             uuid.toByteArray(),
-            ByteArray(keyLength),
+            keyLength,
         )
     }
 }

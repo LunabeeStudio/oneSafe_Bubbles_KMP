@@ -22,11 +22,11 @@ import org.koin.dsl.module
 import studio.lunabee.bubbles.domain.BubblesCryptoDataMapper
 import studio.lunabee.bubbles.domain.crypto.BubblesCryptoEngine
 import studio.lunabee.bubbles.domain.crypto.BubblesDataHashEngine
+import studio.lunabee.bubbles.domain.crypto.BubblesKeyExchangeEngine
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
-import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
 import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
@@ -47,8 +47,8 @@ fun logicModule(
     bubblesCryptoEngine: BubblesCryptoEngine,
     bubblesMainCryptoRepository: BubblesMainCryptoRepository,
     bubblesDataHashEngine: BubblesDataHashEngine,
-    doubleRatchetKeyRepository: DoubleRatchetKeyRepository,
     doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
+    bubblesKeyExchangeEngine: BubblesKeyExchangeEngine,
 ) = listOf(
     bubblesRepositoryModule(
         bubblesSafeRepository = bubblesSafeRepository,
@@ -69,7 +69,6 @@ fun logicModule(
     bubblesUseCaseModule,
     messagingUseCaseModule,
     doubleRatchetModule(
-        doubleRatchetKeyRepository,
         doubleRatchetLocalDatasource,
     ),
     module {
@@ -78,5 +77,6 @@ fun logicModule(
         single<BubblesCryptoEngine> { bubblesCryptoEngine }
         single<BubblesMainCryptoRepository> { bubblesMainCryptoRepository }
         single<BubblesDataHashEngine> { bubblesDataHashEngine }
+        single<BubblesKeyExchangeEngine> { bubblesKeyExchangeEngine }
     },
 )
