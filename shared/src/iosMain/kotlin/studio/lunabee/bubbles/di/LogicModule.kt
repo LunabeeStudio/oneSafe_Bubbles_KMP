@@ -27,8 +27,9 @@ import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
-import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
+import studio.lunabee.messaging.repository.datasource.ConversationLocalDatasource
+import studio.lunabee.messaging.repository.datasource.DoubleRatchetKeyLocalDatasource
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
 import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
@@ -47,8 +48,9 @@ fun logicModule(
     bubblesCryptoEngine: BubblesCryptoEngine,
     bubblesMainCryptoRepository: BubblesMainCryptoRepository,
     bubblesDataHashEngine: BubblesDataHashEngine,
-    doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
     bubblesKeyExchangeEngine: BubblesKeyExchangeEngine,
+    conversationLocalDatasource: ConversationLocalDatasource,
+    doubleRatchetKeyLocalDatasource: DoubleRatchetKeyLocalDatasource,
 ) = listOf(
     bubblesRepositoryModule(
         bubblesSafeRepository = bubblesSafeRepository,
@@ -62,15 +64,15 @@ fun logicModule(
         messageLocalDataSource = messageLocalDataSource,
         handShakeDataLocalDatasource = handShakeDataLocalDatasource,
         enqueuedMessageLocalDataSource = enqueuedMessageLocalDataSource,
+        conversationLocalDatasource = conversationLocalDatasource,
+        doubleRatchetKeyLocalDatasource = doubleRatchetKeyLocalDatasource,
     ),
     messagingRepositoryModule(
         messagingSettingsRepository = messagingSettingsRepository,
     ),
     bubblesUseCaseModule,
     messagingUseCaseModule,
-    doubleRatchetModule(
-        doubleRatchetLocalDatasource,
-    ),
+    doubleRatchetModule,
     module {
         single<Clock> { Clock.System }
         singleOf(::BubblesCryptoDataMapper)
