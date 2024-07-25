@@ -42,31 +42,27 @@ class MessagingCryptoRepositoryImpl @Inject constructor(
             val data = encryptEntry.data
             val mapBlock = encryptEntry.mapBlock
             val rawData = bubblesCryptoDataMapper(mapBlock, data)
-            bubblesCryptoEngine.encrypt(rawData, key, null).getOrElse {
-                throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_ENCRYPTION_FAILED_QUEUE_KEY)
-            }
+            bubblesCryptoEngine.bubblesEncrypt(rawData, key, null)
+                ?: throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_ENCRYPTION_FAILED_QUEUE_KEY)
         }
     }
 
     override suspend fun <Data : Any> queueDecrypt(decryptEntry: DecryptEntry<Data>): Data {
         return getOrCreateQueueKey().use { key ->
-            val rawData = bubblesCryptoEngine.decrypt(decryptEntry.data, key, null).getOrElse {
-                throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_DECRYPTION_FAILED_QUEUE_KEY)
-            }
+            val rawData = bubblesCryptoEngine.bubblesDecrypt(decryptEntry.data, key, null)
+                ?: throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_DECRYPTION_FAILED_QUEUE_KEY)
             bubblesCryptoDataMapper(decryptEntry.mapBlock, rawData, decryptEntry.clazz)
         }
     }
 
     override suspend fun decryptMessage(data: ByteArray, key: DRMessageKey): ByteArray {
-        return bubblesCryptoEngine.decrypt(data, key.value, null).getOrElse {
-            throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_DECRYPTION_FAILED_WRONG_MESSAGE_KEY, cause = it)
-        }
+        return bubblesCryptoEngine.bubblesDecrypt(data, key.value, null)
+            ?: throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_DECRYPTION_FAILED_WRONG_MESSAGE_KEY)
     }
 
     override suspend fun encryptMessage(data: ByteArray, key: DRMessageKey): ByteArray {
-        return bubblesCryptoEngine.encrypt(data, key.value, null).getOrElse {
-            throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_ENCRYPTION_FAILED_BAD_CONTACT_KEY, cause = it)
-        }
+        return bubblesCryptoEngine.bubblesEncrypt(data, key.value, null)
+            ?: throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_ENCRYPTION_FAILED_BAD_CONTACT_KEY)
     }
 
     private suspend fun getOrCreateQueueKey(): ByteArray {
