@@ -53,9 +53,8 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
         val mapBlock = encryptEntry.mapBlock
         val rawData = mapper(mapBlock, data)
         return mainCryptoRepository.decryptBubbles(key.encKey).use { rawKey ->
-            crypto.encrypt(rawData, rawKey, null).getOrElse {
-                throw BubblesCryptoError(BubblesCryptoError.Code.ENCRYPTION_FAILED_BAD_KEY)
-            }
+            crypto.bubblesEncrypt(rawData, rawKey, null)
+                ?: throw BubblesCryptoError(BubblesCryptoError.Code.ENCRYPTION_FAILED_BAD_KEY)
         }
     }
 
@@ -66,9 +65,8 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
                     val data = encryptEntry.data
                     val mapBlock = encryptEntry.mapBlock
                     val rawData = mapper(mapBlock, data)
-                    crypto.encrypt(rawData, rawKey, null).getOrElse {
-                        throw BubblesCryptoError(BubblesCryptoError.Code.ENCRYPTION_FAILED_BAD_KEY)
-                    }
+                    crypto.bubblesEncrypt(rawData, rawKey, null)
+                        ?: throw BubblesCryptoError(BubblesCryptoError.Code.ENCRYPTION_FAILED_BAD_KEY)
                 }
             }
         }
@@ -76,9 +74,8 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
 
     override suspend fun <Data : Any> localDecrypt(key: ContactLocalKey, decryptEntry: DecryptEntry<Data>): Data {
         val rawData = mainCryptoRepository.decryptBubbles(key.encKey).use { rawKey ->
-            crypto.decrypt(decryptEntry.data, rawKey, null).getOrElse {
-                throw BubblesCryptoError(BubblesCryptoError.Code.DECRYPTION_FAILED_BAD_KEY)
-            }
+            crypto.bubblesDecrypt(decryptEntry.data, rawKey, null)
+                ?: throw BubblesCryptoError(BubblesCryptoError.Code.DECRYPTION_FAILED_BAD_KEY)
         }
         return mapper(decryptEntry.mapBlock, rawData, decryptEntry.clazz)
     }
@@ -87,9 +84,8 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
         val rawData = mainCryptoRepository.decryptBubbles(key.encKey).use { rawKey ->
             decryptEntries.map {
                 it to it?.let {
-                    crypto.decrypt(it.data, rawKey, null).getOrElse {
-                        throw BubblesCryptoError(BubblesCryptoError.Code.DECRYPTION_FAILED_BAD_KEY)
-                    }
+                    crypto.bubblesDecrypt(it.data, rawKey, null)
+                        ?: throw BubblesCryptoError(BubblesCryptoError.Code.DECRYPTION_FAILED_BAD_KEY)
                 }
             }
         }
@@ -109,9 +105,8 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
         sharedKey: ContactSharedKey,
     ): ByteArray {
         val plainSharedKey = localDecrypt(localKey, DecryptEntry(sharedKey.encKey, ByteArray::class))
-        return crypto.encrypt(data, plainSharedKey, null).getOrElse {
-            throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_ENCRYPTION_FAILED_BAD_CONTACT_KEY)
-        }
+        return crypto.bubblesEncrypt(data, plainSharedKey, null)
+            ?: throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_ENCRYPTION_FAILED_BAD_CONTACT_KEY)
     }
 
     override suspend fun sharedDecrypt(
@@ -120,9 +115,8 @@ class BubblesCryptoRepositoryImpl @Inject constructor(
         sharedKey: ContactSharedKey,
     ): ByteArray {
         val plainSharedKey = localDecrypt(localKey, DecryptEntry(sharedKey.encKey, ByteArray::class))
-        return crypto.decrypt(data, plainSharedKey, null).getOrElse {
-            throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_DECRYPTION_FAILED_WRONG_CONTACT_KEY)
-        }
+        return crypto.bubblesDecrypt(data, plainSharedKey, null)
+            ?: throw BubblesCryptoError(BubblesCryptoError.Code.BUBBLES_DECRYPTION_FAILED_WRONG_CONTACT_KEY)
     }
 
     override suspend fun deriveUUIDToKey(uuid: DoubleRatchetUUID, keyLength: Int): ByteArray {
