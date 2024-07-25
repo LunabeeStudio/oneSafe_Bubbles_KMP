@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Created by Lunabee Studio / Date - 7/12/2024 - for the oneSafe6 SDK.
- * Last modified 12/07/2024 10:28
+ * Created by Lunabee Studio / Date - 7/25/2024 - for the oneSafe6 SDK.
+ * Last modified 25/07/2024 11:06
  */
 
 package studio.lunabee.bubbles.domain.crypto
 
-interface BubblesDataHashEngine {
+import studio.lunabee.bubbles.domain.model.BubblesKeyPair
 
-    fun deriveKey(
-        key: ByteArray,
-        salt: ByteArray,
+interface BubblesKeyExchangeEngine {
+    fun generateKeyPair(): BubblesKeyPair
+
+    fun createSharedSecret(
+        publicKey: ByteArray,
+        privateKey: ByteArray,
         size: Int,
     ): ByteArray
 }
