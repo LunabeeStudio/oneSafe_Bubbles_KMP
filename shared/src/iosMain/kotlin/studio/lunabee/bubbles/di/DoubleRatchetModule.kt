@@ -24,10 +24,9 @@ import org.koin.dsl.module
 import studio.lunabee.bubbles.repository.DoubleRatchetKeyRepositoryImpl
 import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
 import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
+import studio.lunabee.messaging.repository.DoubleRatchetDatasourceImpl
 
-fun doubleRatchetModule(
-    doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
-): Module = module {
-    single<DoubleRatchetLocalDatasource> { doubleRatchetLocalDatasource }
+val doubleRatchetModule: Module = module {
+    single<DoubleRatchetLocalDatasource> { DoubleRatchetDatasourceImpl(get(), get(), get(), get()) }
     single<DoubleRatchetKeyRepository> { DoubleRatchetKeyRepositoryImpl(get(), get()) }
 }

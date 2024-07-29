@@ -24,6 +24,7 @@ import kotlinx.datetime.Instant
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.EncryptEntry
 import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
+import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
 import studio.lunabee.bubbles.error.BubblesError
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
@@ -40,6 +41,7 @@ class SaveSentMessageUseCase @Inject constructor(
     private val sentMessageRepository: SentMessageRepository,
     private val contactKeyRepository: ContactKeyRepository,
     private val saveMessageUseCase: SaveMessageUseCase,
+    private val bubblesSafeRepository: BubblesSafeRepository,
 ) {
     /**
      * @param plainMessage Message to be encrypted and store in message storage
@@ -75,6 +77,7 @@ class SaveSentMessageUseCase @Inject constructor(
                     encCreatedAt = bubblesCryptoRepository.localEncrypt(key, EncryptEntry(createdAt)),
                     contactId = contactId,
                     order = orderRes.successData,
+                    safeId = bubblesSafeRepository.currentSafeId(),
                 )
                 sentMessageRepository.saveSentMessage(sentMessage)
                 sentMessage

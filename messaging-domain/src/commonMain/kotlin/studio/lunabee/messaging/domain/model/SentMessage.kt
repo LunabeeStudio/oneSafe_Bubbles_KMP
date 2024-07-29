@@ -30,4 +30,5 @@ class SentMessage(
     val encContent: ByteArray,
     val encCreatedAt: ByteArray,
     val order: Float,
+    val safeId: DoubleRatchetUUID,
 )

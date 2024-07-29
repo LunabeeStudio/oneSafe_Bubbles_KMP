@@ -19,20 +19,11 @@
 
 package studio.lunabee.bubbles.domain.model
 
-sealed interface MessageSharingMode {
-    val id: String
-
-    data object Deeplink : MessageSharingMode {
-        override val id: String = DeeplinkId
-    }
-
-    data object CypherText : MessageSharingMode {
-        override val id: String = CypherTextId
-    }
-
-    data object Archive : MessageSharingMode {
-        override val id: String = ArchiveId
-    }
+enum class MessageSharingMode(val id: String) {
+    Deeplink(DeeplinkId),
+    CypherText(CypherTextId),
+    Archive(ArchiveId),
+    ;
 
     companion object {
         fun fromString(raw: String): MessageSharingMode {
@@ -40,9 +31,7 @@ sealed interface MessageSharingMode {
                 DeeplinkId -> Deeplink
                 CypherTextId -> CypherText
                 ArchiveId -> Archive
-                else -> {
-                    CypherText
-                }
+                else -> CypherText
             }
         }
     }

@@ -22,6 +22,7 @@ package studio.lunabee.bubbles.repository
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
 import studio.lunabee.bubbles.domain.repository.ContactKeyRepository
+import studio.lunabee.bubbles.error.BubblesDomainError
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
@@ -30,5 +31,5 @@ class ContactKeyRepositoryImpl @Inject constructor(
 ) : ContactKeyRepository {
 
     override suspend fun getContactLocalKey(contactId: DoubleRatchetUUID): ContactLocalKey =
-        localDataSource.getContactLocalKey(contactId)
+        localDataSource.getContactLocalKey(contactId) ?: throw BubblesDomainError(BubblesDomainError.Code.CONTACT_KEY_NOT_FOUND)
 }

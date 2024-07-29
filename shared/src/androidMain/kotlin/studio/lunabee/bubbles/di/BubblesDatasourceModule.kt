@@ -16,13 +16,16 @@
 
 package studio.lunabee.bubbles.di
 
+import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
+import studio.lunabee.messaging.repository.DoubleRatchetDatasourceImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface BubblesDatasourceModule {
-    //    contactKeyLocalDataSource: ContactKeyLocalDataSource,
-    //    contactLocalDataSource: ContactLocalDataSource,
+    @Binds
+    fun bindsDoubleRatchetDatasource(doubleRatchetDatasourceImpl: DoubleRatchetDatasourceImpl): DoubleRatchetLocalDatasource
 }

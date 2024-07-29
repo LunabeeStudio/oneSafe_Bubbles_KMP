@@ -24,8 +24,9 @@ import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
-import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
+import studio.lunabee.messaging.repository.datasource.ConversationLocalDatasource
+import studio.lunabee.messaging.repository.datasource.DoubleRatchetKeyLocalDatasource
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
 import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
@@ -44,8 +45,9 @@ fun initKoin(
     bubblesCryptoEngine: BubblesCryptoEngine,
     bubblesMainCryptoRepository: BubblesMainCryptoRepository,
     bubblesDataHashEngine: BubblesDataHashEngine,
-    doubleRatchetLocalDatasource: DoubleRatchetLocalDatasource,
     bubblesKeyExchangeEngine: BubblesKeyExchangeEngine,
+    conversationLocalDatasource: ConversationLocalDatasource,
+    doubleRatchetKeyLocalDatasource: DoubleRatchetKeyLocalDatasource,
 ) {
     startKoin {
         modules(
@@ -61,8 +63,9 @@ fun initKoin(
                 bubblesCryptoEngine = bubblesCryptoEngine,
                 bubblesMainCryptoRepository = bubblesMainCryptoRepository,
                 bubblesDataHashEngine = bubblesDataHashEngine,
-                doubleRatchetLocalDatasource = doubleRatchetLocalDatasource,
                 bubblesKeyExchangeEngine = bubblesKeyExchangeEngine,
+                conversationLocalDatasource = conversationLocalDatasource,
+                doubleRatchetKeyLocalDatasource = doubleRatchetKeyLocalDatasource,
             ),
         )
     }

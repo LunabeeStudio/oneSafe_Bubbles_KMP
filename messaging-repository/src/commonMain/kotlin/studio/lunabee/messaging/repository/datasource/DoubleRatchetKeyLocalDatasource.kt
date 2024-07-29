@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Lunabee Studio
+ * Copyright (c) 2024 Lunabee Studio
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Created by Lunabee Studio / Date - 6/14/2023 - for the oneSafe6 SDK.
- * Last modified 6/14/23, 12:17 PM
+ * Created by Lunabee Studio / Date - 7/25/2024 - for the oneSafe6 SDK.
+ * Last modified 25/07/2024 16:46
  */
 
-package studio.lunabee.bubbles.repository.datasource
+package studio.lunabee.messaging.repository.datasource
 
-import studio.lunabee.bubbles.domain.model.contactkey.ContactLocalKey
-import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
+import studio.lunabee.messaging.domain.model.EncDoubleRatchetKey
 
-interface ContactKeyLocalDataSource {
-    suspend fun getContactLocalKey(contactId: DoubleRatchetUUID): ContactLocalKey?
+interface DoubleRatchetKeyLocalDatasource {
+    suspend fun insert(key: EncDoubleRatchetKey)
+    suspend fun getById(id: String): ByteArray?
+    suspend fun deleteById(id: String)
 }

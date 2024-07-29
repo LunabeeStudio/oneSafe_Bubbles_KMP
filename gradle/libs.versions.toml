@@ -37,7 +37,7 @@ detekt = "1.23.1"
 
 kotlinx-datetime = "0.5.0"
 
-doubleratchet = "0.1.4-uuid-bytes-iossupport-SNAPSHOT"
+doubleratchet = "0.1.4-data-class-SNAPSHOT"
 
 kotlinx-coroutines = "1.8.1"
 
