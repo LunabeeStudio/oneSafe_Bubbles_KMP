@@ -40,7 +40,7 @@ class SentMessageRepositoryImpl @Inject constructor(
         return datasource.getSentMessage(id)
     }
 
-    override suspend fun getOldestSentMessage(): SentMessage? {
-        return datasource.getOldestSentMessage()
+    override suspend fun getOldestSentMessage(safeId: DoubleRatchetUUID): SentMessage? {
+        return datasource.getOldestSentMessage(safeId)
     }
 }

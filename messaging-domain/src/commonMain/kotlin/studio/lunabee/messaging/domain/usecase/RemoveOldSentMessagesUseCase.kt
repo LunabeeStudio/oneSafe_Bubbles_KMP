@@ -45,7 +45,7 @@ class RemoveOldSentMessagesUseCase @Inject constructor(
 
     suspend operator fun invoke(): LBResult<Unit> = BubblesError.runCatching(logger) {
         val safeId = bubblesSafeRepository.currentSafeId()
-        var oldestSentMessage: SentMessage? = sentMessageRepository.getOldestSentMessage()
+        var oldestSentMessage: SentMessage? = sentMessageRepository.getOldestSentMessage(bubblesSafeRepository.currentSafeId())
         val sentMessageTimeToLive: Duration = messagingSettingsRepository.bubblesResendMessageDelayInMillis(safeId).milliseconds
         while (oldestSentMessage != null) {
             val createdAtRes: LBResult<Instant> = localContactLocalDecryptUseCase(
@@ -69,6 +69,6 @@ class RemoveOldSentMessagesUseCase @Inject constructor(
 
     private suspend fun delete(actualSentMessage: SentMessage): SentMessage? {
         sentMessageRepository.deleteSentMessage(actualSentMessage.id)
-        return sentMessageRepository.getOldestSentMessage()
+        return sentMessageRepository.getOldestSentMessage(bubblesSafeRepository.currentSafeId())
     }
 }
