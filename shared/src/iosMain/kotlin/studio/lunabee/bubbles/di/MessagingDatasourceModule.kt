@@ -16,6 +16,7 @@
 
 package studio.lunabee.bubbles.di
 
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import studio.lunabee.messaging.repository.datasource.ConversationLocalDatasource
 import studio.lunabee.messaging.repository.datasource.DoubleRatchetKeyLocalDatasource
@@ -24,6 +25,7 @@ import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasour
 import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.SentMessageLocalDatasource
 
+@Suppress("LongParameterList")
 fun messagingDatasourceModule(
     sentMessageLocalDatasource: SentMessageLocalDatasource,
     messageLocalDataSource: MessageLocalDataSource,
@@ -31,7 +33,7 @@ fun messagingDatasourceModule(
     enqueuedMessageLocalDataSource: EnqueuedMessageLocalDataSource,
     conversationLocalDatasource: ConversationLocalDatasource,
     doubleRatchetKeyLocalDatasource: DoubleRatchetKeyLocalDatasource,
-) = module {
+): Module = module {
     single<SentMessageLocalDatasource> { sentMessageLocalDatasource }
     single<MessageLocalDataSource> { messageLocalDataSource }
     single<HandShakeDataLocalDatasource> { handShakeDataLocalDatasource }
