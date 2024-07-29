@@ -78,6 +78,15 @@ tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory.asFile)
 }
 
+tasks.register("assembleAll") {
+    group = "build"
+
+    val assembleProject = project.subprojects.filter { it.name != "oneSafe_Bubbles_KMP" }.map {
+        "${it.path}:assemble"
+    }
+    dependsOn(assembleProject)
+}
+
 dependencies {
     detektPlugins(libs.detekt.formatting)
 }
