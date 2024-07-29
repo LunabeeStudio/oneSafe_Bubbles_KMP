@@ -31,5 +31,6 @@ data class BubblesDomainError(
         NOT_AN_INVITATION_MESSAGE("this message is not an invitation message"),
         WRONG_CONTACT("this message is not for this contact"),
         NO_MATCHING_CONTACT("No contact key matching the encrypted message"),
+        CONTACT_KEY_NOT_FOUND("The contact key does not exist"),
     }
 }
