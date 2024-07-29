@@ -54,7 +54,9 @@ class DecryptSafeMessageUseCaseTest {
     )
 
     private val contactLocalDecryptUseCase: ContactLocalDecryptUseCase = mockk {
-        coEvery { this@mockk(byteArrayOf(0), contactId, Instant::class) } returns LBResult.Success<Instant>(Instant.fromEpochSeconds(0))
+        coEvery {
+            this@mockk(byteArrayOf(0), contactId, Instant::class)
+        } returns LBResult.Success<Instant>(Instant.fromEpochSeconds(0))
         coEvery { this@mockk(byteArrayOf(1), contactId, String::class) } returns LBResult.Success("content")
         coEvery { this@mockk(byteArrayOf(2), contactId, String::class) } returns LBResult.Success<String>("channel")
     }
