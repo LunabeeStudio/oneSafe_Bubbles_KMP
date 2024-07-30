@@ -25,9 +25,9 @@ import kotlinx.serialization.protobuf.ProtoNumber
 @OptIn(ExperimentalSerializationApi::class)
 data class ProtoMessageHeader(
     @ProtoNumber(1)
-    val messageNumber: Int,
+    val messageNumber: Int = 0,
     @ProtoNumber(2)
-    val sequenceMessageNumber: Int,
+    val sequenceMessageNumber: Int = 0,
     @ProtoNumber(3)
     @ByteString
     val publicKey: ByteArray,
