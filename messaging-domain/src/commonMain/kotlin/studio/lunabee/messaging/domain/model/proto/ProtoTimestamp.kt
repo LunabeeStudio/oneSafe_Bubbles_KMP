@@ -28,9 +28,9 @@ import kotlinx.serialization.protobuf.ProtoNumber
 @OptIn(ExperimentalSerializationApi::class)
 data class ProtoTimestamp(
     @ProtoNumber(1)
-    val seconds: Long = 0,
+    val seconds: Long,
     @ProtoNumber(2)
-    val nanos: Int = 0,
+    val nanos: Int,
 ) {
 
     fun toInstant(): Instant {
