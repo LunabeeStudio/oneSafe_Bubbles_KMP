@@ -23,11 +23,19 @@ import studio.lunabee.bubbles.domain.BubblesCryptoDataMapper
 import studio.lunabee.bubbles.domain.crypto.BubblesCryptoEngine
 import studio.lunabee.bubbles.domain.crypto.BubblesDataHashEngine
 import studio.lunabee.bubbles.domain.crypto.BubblesKeyExchangeEngine
+import studio.lunabee.bubbles.domain.crypto.BubblesRandomKeyProvider
+import studio.lunabee.bubbles.domain.di.Inject
+import studio.lunabee.bubbles.domain.repository.BubblesCryptoRepository
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
+import studio.lunabee.bubbles.domain.usecase.CreateContactUseCase
 import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
 import studio.lunabee.bubbles.repository.datasource.ContactLocalDataSource
+import studio.lunabee.doubleratchet.DoubleRatchetEngine
+import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
+import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.repository.MessagingSettingsRepository
+import studio.lunabee.messaging.domain.usecase.InsertHandShakeDataUseCase
 import studio.lunabee.messaging.repository.datasource.ConversationLocalDatasource
 import studio.lunabee.messaging.repository.datasource.DoubleRatchetKeyLocalDatasource
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
@@ -51,6 +59,7 @@ fun logicModule(
     bubblesKeyExchangeEngine: BubblesKeyExchangeEngine,
     conversationLocalDatasource: ConversationLocalDatasource,
     doubleRatchetKeyLocalDatasource: DoubleRatchetKeyLocalDatasource,
+    bubblesRandomKeyProvider: BubblesRandomKeyProvider,
 ) = listOf(
     bubblesRepositoryModule(
         bubblesSafeRepository = bubblesSafeRepository,
@@ -80,5 +89,6 @@ fun logicModule(
         single<BubblesMainCryptoRepository> { bubblesMainCryptoRepository }
         single<BubblesDataHashEngine> { bubblesDataHashEngine }
         single<BubblesKeyExchangeEngine> { bubblesKeyExchangeEngine }
+        single<BubblesRandomKeyProvider> { bubblesRandomKeyProvider }
     },
 )

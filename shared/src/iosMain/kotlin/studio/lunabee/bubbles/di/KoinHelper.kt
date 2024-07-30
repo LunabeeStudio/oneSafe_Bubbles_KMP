@@ -20,6 +20,7 @@ import org.koin.core.context.startKoin
 import studio.lunabee.bubbles.domain.crypto.BubblesCryptoEngine
 import studio.lunabee.bubbles.domain.crypto.BubblesDataHashEngine
 import studio.lunabee.bubbles.domain.crypto.BubblesKeyExchangeEngine
+import studio.lunabee.bubbles.domain.crypto.BubblesRandomKeyProvider
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
 import studio.lunabee.bubbles.repository.BubblesMainCryptoRepository
 import studio.lunabee.bubbles.repository.datasource.ContactKeyLocalDataSource
@@ -48,6 +49,7 @@ fun initKoin(
     bubblesKeyExchangeEngine: BubblesKeyExchangeEngine,
     conversationLocalDatasource: ConversationLocalDatasource,
     doubleRatchetKeyLocalDatasource: DoubleRatchetKeyLocalDatasource,
+    bubblesRandomKeyProvider: BubblesRandomKeyProvider,
 ) {
     startKoin {
         modules(
@@ -66,6 +68,7 @@ fun initKoin(
                 bubblesKeyExchangeEngine = bubblesKeyExchangeEngine,
                 conversationLocalDatasource = conversationLocalDatasource,
                 doubleRatchetKeyLocalDatasource = doubleRatchetKeyLocalDatasource,
+                bubblesRandomKeyProvider = bubblesRandomKeyProvider,
             ),
         )
     }

@@ -19,6 +19,7 @@
 
 package studio.lunabee.messaging.domain.usecase
 
+import kotlinx.coroutines.runBlocking
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.MessageSharingMode
 import studio.lunabee.bubbles.domain.model.contact.PlainContact
@@ -27,11 +28,14 @@ import studio.lunabee.bubbles.domain.usecase.CreateContactUseCase
 import studio.lunabee.doubleratchet.DoubleRatchetEngine
 import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
 import studio.lunabee.doubleratchet.model.AsymmetricKeyPair
+import studio.lunabee.doubleratchet.model.DRPrivateKey
+import studio.lunabee.doubleratchet.model.DRPublicKey
 import studio.lunabee.doubleratchet.model.DRSharedSecret
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.createRandomUUID
 import studio.lunabee.messaging.domain.model.HandShakeData
 
+@OptIn(ExperimentalStdlibApi::class)
 class CreateInvitationUseCase @Inject constructor(
     private val doubleRatchetEngine: DoubleRatchetEngine,
     private val doubleRatchetKeyRepository: DoubleRatchetKeyRepository,
@@ -47,36 +51,40 @@ class CreateInvitationUseCase @Inject constructor(
      *
      * @return the message string to send
      */
-    suspend operator fun invoke(contactName: String, sharingMode: MessageSharingMode): DoubleRatchetUUID {
-        val keyPair: AsymmetricKeyPair = doubleRatchetKeyRepository.generateKeyPair()
-        val contactId = createRandomUUID()
-        val sharedConversationId = createRandomUUID()
-        createContactUseCase(
-            PlainContact(
-                id = contactId,
-                name = contactName,
-                // Not created yet
-                sharedKey = null,
-                sharedConversationId = sharedConversationId,
-                sharingMode = sharingMode,
-            ),
-        )
-        val sharedSalt = bubblesCryptoRepository.deriveUUIDToKey(
-            sharedConversationId,
-            doubleRatchetKeyRepository.rootKeyByteSize,
-        )
-        doubleRatchetEngine.createInvitation(
-            sharedSalt = DRSharedSecret(sharedSalt),
-            newConversationId = contactId,
-        )
-        val handShakeData = HandShakeData(
-            conversationLocalId = contactId,
-            conversationSharedId = sharedConversationId,
-            oneSafePrivateKey = keyPair.privateKey.value,
-            oneSafePublicKey = keyPair.publicKey.value,
-        )
+    operator fun invoke(contactName: String): DoubleRatchetUUID {
+        return runBlocking {
+            println("COUCOU start")
+            val keyPair: AsymmetricKeyPair = doubleRatchetKeyRepository.generateKeyPair()
+            println("COUCOU ${keyPair.publicKey.value.toHexString()}")
+            val contactId = createRandomUUID()
+            val sharedConversationId = createRandomUUID()
+            createContactUseCase(
+                PlainContact(
+                    id = contactId,
+                    name = contactName,
+                    // Not created yet
+                    sharedKey = null,
+                    sharedConversationId = sharedConversationId,
+                    sharingMode = MessageSharingMode.Deeplink,
+                ),
+            )
+            val sharedSalt = bubblesCryptoRepository.deriveUUIDToKey(
+                sharedConversationId,
+                doubleRatchetKeyRepository.rootKeyByteSize,
+            )
+            doubleRatchetEngine.createInvitation(
+                sharedSalt = DRSharedSecret(sharedSalt),
+                newConversationId = contactId,
+            )
+            val handShakeData = HandShakeData(
+                conversationLocalId = contactId,
+                conversationSharedId = sharedConversationId,
+                oneSafePrivateKey = keyPair.privateKey.value,
+                oneSafePublicKey = keyPair.publicKey.value,
+            )
 
-        insertHandShakeDataUseCase(handShakeData)
-        return contactId
+            insertHandShakeDataUseCase(handShakeData)
+            return@runBlocking contactId
+        }
     }
 }

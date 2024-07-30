@@ -20,8 +20,10 @@
 package studio.lunabee.bubbles.di
 
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import studio.lunabee.bubbles.repository.DoubleRatchetKeyRepositoryImpl
+import studio.lunabee.doubleratchet.DoubleRatchetEngine
 import studio.lunabee.doubleratchet.crypto.DoubleRatchetKeyRepository
 import studio.lunabee.doubleratchet.storage.DoubleRatchetLocalDatasource
 import studio.lunabee.messaging.repository.DoubleRatchetDatasourceImpl
@@ -29,4 +31,5 @@ import studio.lunabee.messaging.repository.DoubleRatchetDatasourceImpl
 val doubleRatchetModule: Module = module {
     single<DoubleRatchetLocalDatasource> { DoubleRatchetDatasourceImpl(get(), get(), get(), get()) }
     single<DoubleRatchetKeyRepository> { DoubleRatchetKeyRepositoryImpl(get(), get()) }
+    singleOf(::DoubleRatchetEngine)
 }
