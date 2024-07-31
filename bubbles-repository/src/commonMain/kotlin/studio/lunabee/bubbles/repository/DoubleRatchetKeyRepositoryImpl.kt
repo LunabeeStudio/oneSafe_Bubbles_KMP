@@ -32,7 +32,6 @@ import studio.lunabee.doubleratchet.model.DRRootKey
 import studio.lunabee.doubleratchet.model.DRSharedSecret
 import studio.lunabee.doubleratchet.model.DerivedKeyMessagePair
 import studio.lunabee.doubleratchet.model.DerivedKeyRootPair
-import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 class DoubleRatchetKeyRepositoryImpl @Inject constructor(
@@ -43,10 +42,6 @@ class DoubleRatchetKeyRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalStdlibApi::class, ExperimentalEncodingApi::class)
     override suspend fun generateKeyPair(): AsymmetricKeyPair {
         val keyPair = bubblesKeyExchangeEngine.generateKeyPair()
-        println("COUCOU ${AsymmetricKeyPair(
-            publicKey = DRPublicKey(keyPair.publicKey),
-            privateKey = DRPrivateKey(keyPair.privateKey),
-        )}")
         return AsymmetricKeyPair(
             publicKey = DRPublicKey(keyPair.publicKey),
             privateKey = DRPrivateKey(keyPair.privateKey),

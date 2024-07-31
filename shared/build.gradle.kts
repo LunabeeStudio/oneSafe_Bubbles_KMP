@@ -60,7 +60,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.datetime)
-            api(libs.doubleratchet)
+            implementation(libs.doubleratchet)
             implementation(libs.kotlinx.coroutines.core)
             implementation(project.dependencies.platform(libs.lunabee.bom))
             implementation(libs.lbcore)

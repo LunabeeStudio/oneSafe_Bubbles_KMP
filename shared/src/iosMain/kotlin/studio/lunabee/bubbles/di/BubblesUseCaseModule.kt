@@ -21,7 +21,6 @@ import org.koin.core.component.inject
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
-import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.usecase.ContactLocalDecryptUseCase
 import studio.lunabee.bubbles.domain.usecase.CreateContactUseCase
 import studio.lunabee.bubbles.domain.usecase.DecryptContactNameUseCase
@@ -30,7 +29,6 @@ import studio.lunabee.bubbles.domain.usecase.GetContactUseCase
 import studio.lunabee.bubbles.domain.usecase.GetRecentContactsUseCase
 import studio.lunabee.bubbles.domain.usecase.UpdateContactUseCase
 import studio.lunabee.bubbles.domain.usecase.UpdateMessageSharingModeContactUseCase
-import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.messaging.domain.usecase.CreateInvitationUseCase
 import studio.lunabee.messaging.domain.usecase.GetInvitationMessageUseCase
 

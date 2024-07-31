@@ -31,6 +31,7 @@ import studio.lunabee.messaging.repository.datasource.DoubleRatchetKeyLocalDatas
 import studio.lunabee.messaging.repository.datasource.EnqueuedMessageLocalDataSource
 import studio.lunabee.messaging.repository.datasource.HandShakeDataLocalDatasource
 import studio.lunabee.messaging.repository.datasource.MessageLocalDataSource
+import studio.lunabee.messaging.repository.datasource.MessageQueueLocalDatasource
 import studio.lunabee.messaging.repository.datasource.SentMessageLocalDatasource
 
 @Suppress("LongParameterList")
@@ -50,6 +51,7 @@ fun initKoin(
     conversationLocalDatasource: ConversationLocalDatasource,
     doubleRatchetKeyLocalDatasource: DoubleRatchetKeyLocalDatasource,
     bubblesRandomKeyProvider: BubblesRandomKeyProvider,
+    messageQueueLocalDatasource: MessageQueueLocalDatasource,
 ) {
     startKoin {
         modules(
@@ -69,6 +71,7 @@ fun initKoin(
                 conversationLocalDatasource = conversationLocalDatasource,
                 doubleRatchetKeyLocalDatasource = doubleRatchetKeyLocalDatasource,
                 bubblesRandomKeyProvider = bubblesRandomKeyProvider,
+                messageQueueLocalDatasource = messageQueueLocalDatasource,
             ),
         )
     }
