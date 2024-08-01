@@ -47,7 +47,7 @@ class CreateInvitationUseCase @Inject constructor(
      *
      * @return the message string to send
      */
-    suspend operator fun invoke(contactName: String): DoubleRatchetUUID {
+    suspend operator fun invoke(contactName: String, sharingMode: MessageSharingMode): DoubleRatchetUUID {
         val keyPair: AsymmetricKeyPair = doubleRatchetKeyRepository.generateKeyPair()
         val contactId = createRandomUUID()
         val sharedConversationId = createRandomUUID()
@@ -58,7 +58,7 @@ class CreateInvitationUseCase @Inject constructor(
                 // Not created yet
                 sharedKey = null,
                 sharedConversationId = sharedConversationId,
-                sharingMode = MessageSharingMode.Deeplink,
+                sharingMode = sharingMode,
             ),
         )
         val sharedSalt = bubblesCryptoRepository.deriveUUIDToKey(
