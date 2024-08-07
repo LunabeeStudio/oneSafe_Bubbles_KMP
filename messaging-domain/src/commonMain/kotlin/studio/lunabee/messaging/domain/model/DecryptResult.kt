@@ -21,6 +21,7 @@ package studio.lunabee.messaging.domain.model
 
 import studio.lunabee.bubbles.error.BubblesDoubleRatchetError
 import studio.lunabee.bubbles.error.BubblesError
+import studio.lunabee.doubleratchet.model.DRMessageKey
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 sealed interface DecryptResult {
@@ -29,6 +30,7 @@ sealed interface DecryptResult {
 
     data class NewMessage(
         override val contactId: DoubleRatchetUUID,
+        val messageKey: DRMessageKey,
     ) : DecryptResult {
         override val error: Error? = null
     }
@@ -50,7 +52,10 @@ sealed interface DecryptResult {
             return when (decryptIncomingMessageData) {
                 is DecryptIncomingMessageData.AlreadyDecryptedMessage -> AlreadyDecrypted(decryptIncomingMessageData.contactId)
                 is DecryptIncomingMessageData.DecryptOwnMessage -> OwnMessage(decryptIncomingMessageData.contactId)
-                is DecryptIncomingMessageData.NewMessage -> NewMessage(decryptIncomingMessageData.contactId)
+                is DecryptIncomingMessageData.NewMessage -> NewMessage(
+                    contactId = decryptIncomingMessageData.contactId,
+                    messageKey = decryptIncomingMessageData.messageKey,
+                )
             }
         }
     }

@@ -30,4 +30,6 @@ sealed interface PlainMessageContentData {
     }
 
     data object AcceptedInvitation : PlainMessageContentData
+
+    data object SafeItemSharing : PlainMessageContentData
 }

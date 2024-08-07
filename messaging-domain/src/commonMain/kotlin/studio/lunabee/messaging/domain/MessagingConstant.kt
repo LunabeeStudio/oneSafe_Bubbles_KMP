@@ -16,7 +16,10 @@
 
 package studio.lunabee.messaging.domain
 
-internal object MessagingConstant {
+object MessagingConstant {
     // Used to determine that the message is the invitation response message
     const val FirstMessageData: String = "c08b1cb8-3a94-4e9a-af30-6677053b7a60"
+    const val SafeItemMessageData: String = "388188db-8d10-41d3-94a7-7fb8e821fa59"
+    const val MessageFileName: String = "message"
+    const val AttachmentFileName: String = "attachment"
 }

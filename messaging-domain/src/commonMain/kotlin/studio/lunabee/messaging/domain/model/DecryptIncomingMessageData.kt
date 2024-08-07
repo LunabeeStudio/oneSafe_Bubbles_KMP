@@ -19,6 +19,7 @@
 
 package studio.lunabee.messaging.domain.model
 
+import studio.lunabee.doubleratchet.model.DRMessageKey
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 
 sealed interface DecryptIncomingMessageData {
@@ -28,6 +29,7 @@ sealed interface DecryptIncomingMessageData {
     data class NewMessage(
         override val contactId: DoubleRatchetUUID,
         override val osPlainMessage: SharedMessage?,
+        val messageKey: DRMessageKey,
     ) : DecryptIncomingMessageData
 
     data class DecryptOwnMessage(

@@ -179,7 +179,7 @@ class DecryptIncomingMessageUseCase @Inject constructor(
                 recipientId = plainMessage.recipientId,
             )
         }
-        return DecryptIncomingMessageData.NewMessage(contact.id, osPlainMessage)
+        return DecryptIncomingMessageData.NewMessage(contact.id, osPlainMessage, messageKey)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -219,12 +219,13 @@ class DecryptIncomingMessageUseCase @Inject constructor(
                 val plainBody = messagingCryptoRepository.decryptMessage(plainMessage.body, messageKey)
                 val plainMessageDataProto = ProtoBuf.decodeFromByteArray<ProtoMessageData>(plainBody)
                 DecryptIncomingMessageData.NewMessage(
-                    contact.id,
-                    SharedMessage(
+                    contactId = contact.id,
+                    osPlainMessage = SharedMessage(
                         content = plainMessageDataProto.content,
                         recipientId = plainMessage.recipientId,
                         sentAt = plainMessageDataProto.sentAt.toInstant(),
                     ),
+                    messageKey = messageKey,
                 )
             }
         }

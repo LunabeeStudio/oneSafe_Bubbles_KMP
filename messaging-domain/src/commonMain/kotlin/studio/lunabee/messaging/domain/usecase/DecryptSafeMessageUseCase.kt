@@ -20,9 +20,9 @@
 package studio.lunabee.messaging.domain.usecase
 
 import kotlinx.datetime.Instant
-import studio.lunabee.messaging.domain.MessagingConstant
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.usecase.ContactLocalDecryptUseCase
+import studio.lunabee.messaging.domain.MessagingConstant
 import studio.lunabee.messaging.domain.model.PlainMessageContentData
 import studio.lunabee.messaging.domain.model.PlainMessageData
 import studio.lunabee.messaging.domain.model.SafeMessage
@@ -59,6 +59,7 @@ class DecryptSafeMessageUseCase @Inject constructor(
                 channel = channel,
                 isRead = message.isRead,
             )
+            PlainMessageContentData.SafeItemSharing -> TODO()
         }
     }
 
@@ -67,10 +68,10 @@ class DecryptSafeMessageUseCase @Inject constructor(
      */
     suspend fun content(message: SafeMessage): PlainMessageContentData {
         val content = contactLocalDecryptUseCase(message.encContent, message.fromContactId, String::class)
-        return if (content.data == MessagingConstant.FirstMessageData) {
-            PlainMessageContentData.AcceptedInvitation
-        } else {
-            PlainMessageContentData.Default(content = content)
+        return when (content.data) {
+            MessagingConstant.FirstMessageData -> PlainMessageContentData.AcceptedInvitation
+            MessagingConstant.SafeItemMessageData -> PlainMessageContentData.SafeItemSharing
+            else -> PlainMessageContentData.Default(content = content)
         }
     }
 }

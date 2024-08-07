@@ -27,6 +27,7 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.doubleratchet.model.DoubleRatchetUUID
 import studio.lunabee.doubleratchet.model.createRandomUUID
+import studio.lunabee.messaging.domain.MessagingConstant
 import studio.lunabee.messaging.domain.model.DecryptResult
 import studio.lunabee.messaging.domain.model.proto.ProtoInvitationMessage
 
@@ -44,20 +45,28 @@ class ManageIncomingMessageUseCase @Inject constructor(
             when (val result = decryptIncomingMessageUseCase(messageData = data)) {
                 is LBResult.Success -> {
                     val message = result.successData.osPlainMessage
-                    val contactId = result.successData.contactId
-                    message?.let {
-                        saveMessageUseCase(
-                            plainMessage = message,
-                            contactId = contactId,
-                            channel = channel,
-                            id = createRandomUUID(),
-                        )
+                    val messageResultData = when (message?.content) {
+                        MessagingConstant.SafeItemMessageData -> {
+                            ManagingIncomingMessageResultData.SafeItem(
+                                decryptResult = DecryptResult.fromDecryptIncomingMessageData(result.successData),
+                            )
+                        }
+                        else -> {
+                            val contactId = result.successData.contactId
+                            message?.let {
+                                saveMessageUseCase(
+                                    plainMessage = message,
+                                    contactId = contactId,
+                                    channel = channel,
+                                    id = createRandomUUID(),
+                                )
+                            }
+                            ManagingIncomingMessageResultData.Message(
+                                DecryptResult.fromDecryptIncomingMessageData(result.successData),
+                            )
+                        }
                     }
-                    LBResult.Success(
-                        ManagingIncomingMessageResultData.Message(
-                            DecryptResult.fromDecryptIncomingMessageData(result.successData),
-                        ),
-                    )
+                    LBResult.Success(messageResultData)
                 }
                 is LBResult.Failure -> LBResult.Failure(result.throwable)
             }
@@ -83,6 +92,10 @@ sealed interface ManagingIncomingMessageResultData {
     data object Invitation : ManagingIncomingMessageResultData
 
     data class Message(
+        val decryptResult: DecryptResult,
+    ) : ManagingIncomingMessageResultData
+
+    data class SafeItem(
         val decryptResult: DecryptResult,
     ) : ManagingIncomingMessageResultData
 }
