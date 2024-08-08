@@ -16,7 +16,6 @@
 
 package studio.lunabee.bubbles.di
 
-import org.koin.core.module.Module
 import org.koin.dsl.module
 import studio.lunabee.messaging.repository.datasource.ConversationLocalDatasource
 import studio.lunabee.messaging.repository.datasource.DoubleRatchetKeyLocalDatasource
