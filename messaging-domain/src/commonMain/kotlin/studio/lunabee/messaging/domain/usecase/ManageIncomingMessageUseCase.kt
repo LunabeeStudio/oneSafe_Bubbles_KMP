@@ -75,6 +75,8 @@ class ManageIncomingMessageUseCase @Inject constructor(
             false
         } catch (e: IllegalArgumentException) {
             false
+        } catch (e: NullPointerException) {
+            false
         }
     }
 }
