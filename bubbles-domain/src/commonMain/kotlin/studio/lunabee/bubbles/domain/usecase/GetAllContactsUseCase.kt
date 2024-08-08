@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import studio.lunabee.bubbles.domain.di.Inject
 import studio.lunabee.bubbles.domain.model.contact.Contact
-import studio.lunabee.bubbles.domain.repository.ContactRepository
 import studio.lunabee.bubbles.domain.repository.BubblesSafeRepository
+import studio.lunabee.bubbles.domain.repository.ContactRepository
 
 class GetAllContactsUseCase @Inject constructor(
     private val bubblesSafeRepository: BubblesSafeRepository,
